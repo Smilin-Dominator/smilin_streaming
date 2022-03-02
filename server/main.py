@@ -67,7 +67,7 @@ async def disconnect():
 
 @app.get("/users/{username}/exists")
 async def user_check(username: str, email: str):
-    return user_exists(username, email)
+    return await user_exists(username, email)
 
 
 @app.get("/users/{username}/login")

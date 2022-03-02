@@ -2,21 +2,21 @@
 
 ## /users<hr>
 
-#### /users/{username}/exists
+#### /users/exists
 
 | Field       | Values                                                                                        |
 |-------------|-----------------------------------------------------------------------------------------------|
 | Parameters  | username (string), email (string)                                                             |
 | Description | This returns 'false' if a user with the email or username doesn't exist and 'true' if it does |
 
-#### /users/{username}/register
+#### /users/register
 
 | Field       | Values                                                                                                   |
 |-------------|----------------------------------------------------------------------------------------------------------|
 | Parameters  | username (string), email (string), password (string)                                                     |
 | Description | This checks if a user with the given email or username doesn't exist, and if it doesn't creates the user |
 
-#### /users/{username}/login
+#### /users/login
 
 | Field       | Values                                                |
 |-------------|-------------------------------------------------------|

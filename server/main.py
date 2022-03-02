@@ -115,6 +115,11 @@ async def register(username: str, email: str, password: str):
                 FOREIGN KEY (artist_id) REFERENCES songs.artists(id)
             );
             
+            CREATE TABLE playlists (
+                name VARCHAR(250) PRIMARY KEY,
+                table_name VARCHAR(256)
+            )
+            
             USE app;
             
         """)

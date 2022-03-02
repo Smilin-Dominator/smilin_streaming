@@ -12,6 +12,14 @@
 
 # Database For Each User (x)
 
+### playlists
+
+| Field Name | Data Type                |
+|------------|--------------------------|
+| name       | varchar(50), primary_key |
+| table_name | varchar(256)             |
+
+
 ### song_history
 
 | Field Name   | Data Type                              |

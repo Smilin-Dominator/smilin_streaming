@@ -129,3 +129,25 @@ async def register(username: str, email: str, password: str):
     else:
         return "User Already Exists!"
 
+
+@app.get("/playlists/create")
+async def create_playlist(name: str, user: User = Depends(login)):
+    exists = await database.fetch_one(f"SELECT name FROM {user.username}.playlists WHERE name = :name", {
+        "name": name
+    })
+    if not exists:
+        table = "playlist_" + name.lower().replace(" ", "_")
+        await database.execute(f"INSERT INTO {user.username}.playlists VALUES (:name, :table_name)", {
+            "name": name,
+            "table_name": table
+        })
+        await database.execute(f"""
+            CREATE TABLE {user.username}.{table} (
+                song_id INT PRIMARY KEY,
+                date_added DATE,
+                FOREIGN KEY (song_id) REFERENCES songs.songs(id)
+            )
+        """)
+        return True
+    else:
+        return False

@@ -34,6 +34,13 @@
 | artist_id    | int, foreign_key (ref. songs.artists.id) |
 | listen_count | int                                      |
 
+### playlist_x
+
+| Field Name | Data Type                                             |
+|------------|-------------------------------------------------------|
+| song_id    | int, primary_key, foreign_key (ref. songs.artists.id) |
+| date_added | datetime                                              |
+
 # Song Database (songs)
 
 ### artists

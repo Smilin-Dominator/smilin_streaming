@@ -14,6 +14,8 @@ queries = Queries()
 @app.on_event("startup")
 async def start_db():
     await database.connect()
+    if (not await exists("songs")) and (not await exists("app")):
+        await database.execute(queries.FIRST_TIME_SETUP)
 
 
 @app.on_event("shutdown")

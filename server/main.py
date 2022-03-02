@@ -151,3 +151,17 @@ async def create_playlist(name: str, user: User = Depends(login)):
         return True
     else:
         return False
+
+
+@app.get("/playlists/get")
+async def describe_playlist(name: str, user: User = Depends(login)):
+    table_name = await database.fetch_one(f"SELECT table_name FROM {user.username}.playlists WHERE name = {name}")
+    return await database.fetch_all(f"""
+        SELECT 
+            songs.songs.name AS name,
+            songs.artists.name AS artist,
+            date_added AS date 
+        FROM {user.username}.{table_name[0]} 
+            INNER JOIN songs.songs ON songs.songs.id = song_id
+            INNER JOIN songs.artists ON songs.songs.id = songs.artists.id;
+    """)

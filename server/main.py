@@ -70,6 +70,17 @@ async def user_check(username: str, email: str):
     return user_exists(username, email)
 
 
+@app.get("/users/{username}/login")
+async def login(password: str, username: str):
+    hash, salt1, salt2, email = await database.fetch_one(
+        "SELECT password_hash, salt1, salt2, email FROM users WHERE username = :username;", {"username": username}
+    )
+    if sha256(''.join([salt1, hash, salt2])).hexdigest() == password:
+        return User(username=username, email=email, password_hash=password)
+    else:
+        return False
+
+
 @app.get("/users/{username}/register")
 async def register(username: str, email: str, password: str):
     if not await user_exists(username, email):
@@ -109,3 +120,4 @@ async def register(username: str, email: str, password: str):
         return "Success!"
     else:
         return "User Already Exists!"
+

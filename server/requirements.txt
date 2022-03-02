@@ -6,3 +6,4 @@ psycopg2
 mysqlclient
 sqlalchemy
 pydantic
+aiofiles

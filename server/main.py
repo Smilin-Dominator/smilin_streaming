@@ -14,10 +14,25 @@ engine = create_engine(DATABASE_URL)
 queries = Queries()
 
 
+async def db_exists(tbl: str):
+    query = "SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = :db;"
+    result = await database.fetch_one(query, {"db": tbl})
+    return False if result is None else True
+
+
+async def user_exists(username: str, email: str):
+    query = "SELECT username FROM users WHERE username = :username OR email = :email"
+    result = await database.fetch_one(query, {"username": username, "email": email})
+    if result:
+        return True
+    else:
+        return False
+
+
 @app.on_event("startup")
 async def start_db():
     await database.connect()
-    if (not await exists("songs")) and (not await exists("app")):
+    if (not await db_exists("songs")) and (not await db_exists("app")):
         await database.execute(queries.FIRST_TIME_SETUP)
 
 
@@ -27,18 +42,13 @@ async def disconnect():
 
 
 @app.get("/users/{username}/exists")
-async def exists(username: str):
-    query = "SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = :username;"
-    result = await database.fetch_one(query, {"username": username})
-    if result:
-        return True
-    else:
-        return False
+async def user_check(username: str, email: str):
+    return user_exists(username, email)
 
 
 @app.get("/users/{username}/register")
 async def register(username: str, email: str, password: str):
-    if not await exists(username):
+    if not await user_exists(username, email):
         salt1 = ''.join([choice(choice([ascii_uppercase, ascii_lowercase, hexdigits, octdigits])) for _ in range(512)])
         salt2 = ''.join([choice(choice([ascii_uppercase, ascii_lowercase, hexdigits, octdigits])) for _ in range(512)])
         hashed_pass = sha256(''.join([salt1, password, salt2]).encode('utf-8')).hexdigest()

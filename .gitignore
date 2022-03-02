@@ -1,6 +1,14 @@
+ # IDE Configuration
  .idea/
+
+# Compiled
 __pycache__/
+
+# Misc
 *.txt
 *.json
 *.iml
 *.http
+
+# Program Data
+server/db/

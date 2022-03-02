@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+databases[mysql]
+asyncpg
+psycopg2
+mysqlclient
+sqlalchemy
+pydantic

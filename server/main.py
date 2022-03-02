@@ -103,6 +103,8 @@ async def register(username: str, email: str, password: str):
                 FOREIGN KEY (artist_id) REFERENCES songs.artists(id)
             );
             
+            USE app;
+            
         """)
         return "Success!"
     else:

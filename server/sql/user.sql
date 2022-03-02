@@ -1,3 +1,7 @@
+USE app;
+INSERT INTO users (username, email, password_hash, salt1, salt2)
+VALUES (:username, :email, :password_hash, :salt1, :salt2);
+
 CREATE DATABASE :username;
 USE :username;
 CREATE TABLE song_history (

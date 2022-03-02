@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends
 from fastapi.security import OAuth2PasswordBearer
 from databases import Database as Db
 from sqlalchemy import create_engine
-from formats import User, Queries
+from formats import User
 from string import ascii_lowercase, ascii_uppercase, hexdigits, octdigits
 from random import choice
 from hashlib import sha256
@@ -11,7 +11,6 @@ app = FastAPI()
 DATABASE_URL = "mysql+pymysql://root:override@localhost/app"
 database = Db(DATABASE_URL)
 engine = create_engine(DATABASE_URL)
-queries = Queries()
 
 
 async def db_exists(tbl: str):
@@ -32,8 +31,33 @@ async def user_exists(username: str, email: str):
 @app.on_event("startup")
 async def start_db():
     await database.connect()
-    if (not await db_exists("songs")) and (not await db_exists("app")):
-        await database.execute(queries.FIRST_TIME_SETUP)
+    if (not await db_exists("songs")) or (not await db_exists("app")):
+        await database.execute("""
+            CREATE DATABASE IF NOT EXISTS app;
+            
+            CREATE TABLE IF NOT EXISTS app.users (
+                username VARCHAR(50) PRIMARY KEY,
+                email VARCHAR(256),
+                password_hash VARCHAR(256),
+                salt1 VARCHAR(512),
+                salt2 VARCHAR(512)
+            );
+            
+            CREATE DATABASE IF NOT EXISTS songs;
+          
+            CREATE TABLE IF NOT EXISTS songs.artists (
+                id INT PRIMARY KEY,
+                name VARCHAR(256)
+            );
+          
+            CREATE TABLE IF NOT EXISTS songs.songs (
+                 id INT PRIMARY KEY,
+                 name VARCHAR(256),
+                 genre VARCHAR(20),
+                 artist_id INT,
+                 FOREIGN KEY (artist_id) REFERENCES songs.artists(id)
+            );        
+        """)
 
 
 @app.on_event("shutdown")

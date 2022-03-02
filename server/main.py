@@ -75,8 +75,9 @@ async def login(password: str, username: str):
     hash, salt1, salt2, email = await database.fetch_one(
         "SELECT password_hash, salt1, salt2, email FROM users WHERE username = :username;", {"username": username}
     )
-    if sha256(''.join([salt1, hash, salt2])).hexdigest() == password:
-        return User(username=username, email=email, password_hash=password)
+    new_hash = sha256(''.join([salt1, password, salt2]).encode('utf-8')).hexdigest()
+    if new_hash == hash:
+        return User(username=username, email=email, password_hash=hash)
     else:
         return False
 

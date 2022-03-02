@@ -52,13 +52,34 @@ async def register(username: str, email: str, password: str):
         salt1 = ''.join([choice(choice([ascii_uppercase, ascii_lowercase, hexdigits, octdigits])) for _ in range(512)])
         salt2 = ''.join([choice(choice([ascii_uppercase, ascii_lowercase, hexdigits, octdigits])) for _ in range(512)])
         hashed_pass = sha256(''.join([salt1, password, salt2]).encode('utf-8')).hexdigest()
-        await database.execute(queries.USER_SETUP, {
+        await database.execute("""
+            INSERT INTO app.users (username, email, password_hash, salt1, salt2)
+            VALUES (:username, :email, :password_hash, :salt1, :salt2);
+        """, {
             "username": username,
             "email": email,
             "password_hash": hashed_pass,
             "salt1": salt1,
             "salt2": salt2
         })
+        await database.execute(f"""
+
+            CREATE DATABASE `{username}`;
+            USE `{username}`;
+            
+            CREATE TABLE song_history (
+                song_id INT PRIMARY KEY,
+                listen_count INT,
+                FOREIGN KEY (song_id) REFERENCES songs.songs(id)
+            );
+            
+            CREATE TABLE artist_history (
+                artist_id INT PRIMARY KEY,
+                listen_count INT,
+                FOREIGN KEY (artist_id) REFERENCES songs.artists(id)
+            );
+            
+        """)
         return "Success!"
     else:
         return "User Already Exists!"

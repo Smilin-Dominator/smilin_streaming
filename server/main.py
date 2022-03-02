@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Depends
-from fastapi.security import OAuth2PasswordBearer
+from pathlib import Path
 from databases import Database as Db
 from sqlalchemy import create_engine
 from formats import User
@@ -11,6 +11,7 @@ app = FastAPI()
 DATABASE_URL = "mysql+pymysql://root:override@localhost/app"
 database = Db(DATABASE_URL)
 engine = create_engine(DATABASE_URL)
+songs = Path("songs")
 
 
 async def db_exists(tbl: str):
@@ -31,6 +32,7 @@ async def user_exists(username: str, email: str):
 @app.on_event("startup")
 async def start_db():
     await database.connect()
+    songs.mkdir() if not songs.exists() else None
     if (not await db_exists("songs")) or (not await db_exists("app")):
         await database.execute("""
             CREATE DATABASE IF NOT EXISTS app;

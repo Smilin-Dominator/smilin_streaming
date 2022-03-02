@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  mariadb:
+    container_name: "MariaDB"
+    image: mariadb:latest
+    environment:
+      MARIADB_ROOT_PASSWORD: override
+      MARIADB_ROOT_HOST: '%'
+      MARIADB_DATABASE: app
+      MARIADB_USER: server
+      MARIADB_PASSWORD: test
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./server/db/:/var/lib/mysql"

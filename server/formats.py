@@ -1,12 +1,13 @@
 from pydantic import BaseModel
-from enum import Enum
+from dataclasses import dataclass
 
 
 def read_query(fn: str):
     return open(f"sql/{fn}.sql", "r").read()
 
 
-class Queries(Enum):
+@dataclass
+class Queries:
     FIRST_TIME_SETUP = read_query("first_time")
     USER_SETUP = read_query("user")
 

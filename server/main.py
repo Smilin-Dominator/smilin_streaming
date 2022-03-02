@@ -130,6 +130,11 @@ async def register(username: str, email: str, password: str):
         return "User Already Exists!"
 
 
+@app.get("/playlists/list")
+async def list_playlists(user: User = Depends(login)):
+    return await database.fetch_all(f"SELECT name FROM {user.username}.playlists")
+
+
 @app.get("/playlists/create")
 async def create_playlist(name: str, user: User = Depends(login)):
     exists = await database.fetch_one(f"SELECT name FROM {user.username}.playlists WHERE name = :name", {

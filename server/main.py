@@ -165,3 +165,13 @@ async def describe_playlist(name: str, user: User = Depends(login)):
             INNER JOIN songs.songs ON songs.songs.id = song_id
             INNER JOIN songs.artists ON songs.songs.id = songs.artists.id;
     """)
+
+
+@app.get("/playlists/delete")
+async def drop_playlist(name: str, user: User = Depends(login)):
+    table_name = await database.fetch_one(f"SELECT table_name FROM {user.username}.playlists WHERE name = {name}")
+    if not table_name:
+        return False
+    await database.execute(f"DROP TABLE {user.username}.{table_name[0]};")
+    await database.execute(f"DELETE FROM {user.username}.playlists WHERE name = {name};")
+    return True

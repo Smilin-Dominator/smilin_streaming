@@ -53,3 +53,19 @@
 |-------------|--------------------------------|
 | Parameters  | name (string), user (User)     |
 | Description | This deletes a user's playlist |
+
+## /playlists/songs
+
+#### /playlists/songs/add
+
+| Field       | Values                                                         |
+|-------------|----------------------------------------------------------------|
+| Parameters  | name (string), song (string), user (User)                      |
+| Description | This adds a song to the specified playlist if it doesn't exist |
+
+#### /playlists/songs/delete
+
+| Field       | Values                                                       |
+|-------------|--------------------------------------------------------------|
+| Parameters  | name (string), song (string), user (User)                    |
+| Description | This deletes a song from the specified playlist if it exists |

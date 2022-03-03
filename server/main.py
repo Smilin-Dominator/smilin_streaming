@@ -160,7 +160,9 @@ async def create_playlist(name: str, user: User = Depends(login)):
 
 @app.get("/playlists/get")
 async def describe_playlist(name: str, user: User = Depends(login)):
-    table_name = await database.fetch_one(f"SELECT table_name FROM {user.username}.playlists WHERE name = {name}")
+    table_name = await database.fetch_one(f"SELECT table_name FROM {user.username}.playlists WHERE name = :name", {
+        "name": name
+    })
     return await database.fetch_all(f"""
         SELECT 
             songs.songs.name AS name,
@@ -174,7 +176,9 @@ async def describe_playlist(name: str, user: User = Depends(login)):
 
 @app.get("/playlists/delete")
 async def drop_playlist(name: str, user: User = Depends(login)):
-    table_name = await database.fetch_one(f"SELECT table_name FROM {user.username}.playlists WHERE name = {name}")
+    table_name = await database.fetch_one(f"SELECT table_name FROM {user.username}.playlists WHERE name = :name", {
+        "name": name
+    })
     if not table_name:
         return False
     await database.execute(f"DROP TABLE {user.username}.{table_name[0]};")

@@ -26,7 +26,7 @@ export class LoginPage implements OnInit {
         }
       }).forEach(e => {
         if (e != false) {
-          this.router.navigate(['/home']).then()
+          this.router.navigate(['/home', this.username, this.password]).then()
         }
       })
     }
@@ -41,7 +41,7 @@ export class LoginPage implements OnInit {
         }
       }).forEach(e => {
         if (e != false) {
-          this.router.navigate(['/home']).then()
+          this.router.navigate(['/home', this.username, this.password]).then()
         }
       })
     }

@@ -57,8 +57,8 @@ async def start_db():
             );
             
             CREATE TABLE IF NOT EXISTS app.artists (
-                username VARCHAR(50) PRIMARY KEY,
-                `name` VARCHAR(256),
+                name VARCHAR(256) PRIMARY KEY,
+                username VARCHAR(50),
                 password_hash VARCHAR(256),
                 salt1 VARCHAR(512),
                 salt2 VARCHAR(512)
@@ -68,9 +68,9 @@ async def start_db():
           
             CREATE TABLE IF NOT EXISTS songs.artists (
                 id INT PRIMARY KEY AUTO_INCREMENT,
-                `name` VARCHAR(256),
-                followers INT
-                FOREIGN KEY (`name`) REFERENCES app.artists(`name`)
+                name VARCHAR(256),
+                followers INT,
+                FOREIGN KEY (name) REFERENCES app.artists(name)
             );
           
             CREATE TABLE IF NOT EXISTS songs.songs (
@@ -173,8 +173,8 @@ async def register_artist(name: str, username: str, password: str):
         salt2 = ''.join([choice(choice([ascii_uppercase, ascii_lowercase, hexdigits, octdigits])) for _ in range(512)])
         hashed_pass = sha256(''.join([salt1, password, salt2]).encode('utf-8')).hexdigest()
         await database.execute("""
-            INSERT INTO app.artists (username, password_hash, salt1, salt2)
-            VALUES (:username, :password_hash, :salt1, :salt2);
+            INSERT INTO app.artists (name, username, password_hash, salt1, salt2)
+            VALUES (:name, :username, :password_hash, :salt1, :salt2);
         """, {
             "name": name,
             "username": username,
@@ -182,9 +182,10 @@ async def register_artist(name: str, username: str, password: str):
             "salt1": salt1,
             "salt2": salt2
         })
-        await database.execute(f"INSERT INTO songs.artists VALUES (:name, 0)", {
+        await database.execute(f"INSERT INTO songs.artists(name, followers) VALUES (:name, 0)", {
             "name": name
         })
+        return True
     else:
         return "Artist Already Exists!"
 

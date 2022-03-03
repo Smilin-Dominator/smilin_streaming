@@ -56,8 +56,10 @@ async def start_db():
             CREATE TABLE IF NOT EXISTS songs.songs (
                  id INT PRIMARY KEY,
                  name VARCHAR(256),
-                 genre VARCHAR(20),
                  artist_id INT,
+                 album VARCHAR(256),
+                 genre VARCHAR(20),
+                 filename VARCHAR(256),
                  FOREIGN KEY (artist_id) REFERENCES songs.artists(id)
             );        
         """)

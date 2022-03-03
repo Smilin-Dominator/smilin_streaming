@@ -56,6 +56,8 @@
 |------------|------------------------------------------|
 | id         | int, primary_key                         |
 | name       | varchar(128)                             |
-| genre      | varchar(20)                              |
 | artist_id  | int, foreign_key (ref. songs.artists.id) |
+| album      | varchar(256)                             |
+| genre      | varchar(20)                              |
+| filename   | varchar(256)                             |
 

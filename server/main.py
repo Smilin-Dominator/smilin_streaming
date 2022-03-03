@@ -105,28 +105,25 @@ async def register(username: str, email: str, password: str):
         })
         await database.execute(f"""
 
-            CREATE DATABASE `{username}`;
-            USE `{username}`;
+            CREATE DATABASE {username};
             
-            CREATE TABLE song_history (
+            CREATE TABLE {username}.song_history (
                 song_id INT PRIMARY KEY,
                 listen_count INT,
                 FOREIGN KEY (song_id) REFERENCES songs.songs(id)
             );
             
-            CREATE TABLE artist_history (
+            CREATE TABLE {username}.artist_history (
                 artist_id INT PRIMARY KEY,
                 listen_count INT,
                 FOREIGN KEY (artist_id) REFERENCES songs.artists(id)
             );
             
-            CREATE TABLE playlists (
+            CREATE TABLE {username}.playlists (
                 name VARCHAR(250) PRIMARY KEY,
                 table_name VARCHAR(256)
             )
-            
-            USE app;
-            
+                        
         """)
         return "Success!"
     else:

@@ -8,7 +8,6 @@ from string import ascii_lowercase, ascii_uppercase, hexdigits, octdigits
 from random import choice
 from hashlib import sha256
 from datetime import datetime
-from typing import Union
 
 app = FastAPI()
 DATABASE_URL = "mysql+pymysql://root:override@localhost/app"
@@ -51,12 +50,12 @@ async def start_db():
             CREATE DATABASE IF NOT EXISTS songs;
           
             CREATE TABLE IF NOT EXISTS songs.artists (
-                id INT PRIMARY KEY,
+                id INT PRIMARY KEY AUTO_INCREMENT,
                 name VARCHAR(256)
             );
           
             CREATE TABLE IF NOT EXISTS songs.songs (
-                 id INT PRIMARY KEY,
+                 id INT PRIMARY KEY AUTO_INCREMENT,
                  name VARCHAR(256),
                  artist_id INT,
                  album VARCHAR(256),

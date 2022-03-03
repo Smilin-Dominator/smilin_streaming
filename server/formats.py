@@ -7,5 +7,7 @@ class User(BaseModel):
 
 
 class Artist(BaseModel):
+    id:             int
+    name:           str
     username:       str
     password_hash:  str

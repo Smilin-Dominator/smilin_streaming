@@ -114,12 +114,13 @@ async def user_login(password: str, username: str):
 
 @app.post("/artists/login")
 async def artist_login(password: str, username: str):
-    hash, salt1, salt2 = await database.fetch_one(
-        "SELECT password_hash, salt1, salt2 FROM artists WHERE username = :username;", {"username": username}
+    hash, salt1, salt2, name = await database.fetch_one(
+        "SELECT password_hash, salt1, salt2, name FROM artists WHERE username = :username;", {"username": username}
     )
     new_hash = sha256(''.join([salt1, password, salt2]).encode('utf-8')).hexdigest()
     if new_hash == hash:
-        return Artist(username=username, password_hash=new_hash)
+        id = await database.fetch_one("SELECT id FROM songs.artists WHERE name = :name", {"name": name})
+        return Artist(id=id[0], name=name, username=username, password_hash=new_hash)
     else:
         return False
 

@@ -22,9 +22,9 @@ async def db_exists(tbl: str):
     return False if result is None else True
 
 
-async def user_exists(username: str, email: str):
-    query = "SELECT username FROM users WHERE username = :username OR email = :email"
-    result = await database.fetch_one(query, {"username": username, "email": email})
+async def user_exists(username: str):
+    query = "SELECT username FROM users WHERE username = :username"
+    result = await database.fetch_one(query, {"username": username})
     if result:
         return True
     else:
@@ -41,7 +41,6 @@ async def start_db():
             
             CREATE TABLE IF NOT EXISTS app.users (
                 username VARCHAR(50) PRIMARY KEY,
-                email VARCHAR(256),
                 password_hash VARCHAR(256),
                 salt1 VARCHAR(512),
                 salt2 VARCHAR(512)
@@ -72,34 +71,33 @@ async def disconnect():
 
 
 @app.get("/users/exists")
-async def user_check(username: str, email: str):
-    return await user_exists(username, email)
+async def user_check(username: str):
+    return await user_exists(username)
 
 
 @app.post("/users/login")
 async def user_login(password: str, username: str):
-    hash, salt1, salt2, email = await database.fetch_one(
-        "SELECT password_hash, salt1, salt2, email FROM users WHERE username = :username;", {"username": username}
+    hash, salt1, salt2 = await database.fetch_one(
+        "SELECT password_hash, salt1, salt2 FROM users WHERE username = :username;", {"username": username}
     )
     new_hash = sha256(''.join([salt1, password, salt2]).encode('utf-8')).hexdigest()
     if new_hash == hash:
-        return User(username=username, email=email, password_hash=hash)
+        return User(username=username, password_hash=hash)
     else:
         return False
 
 
 @app.post("/users/register")
-async def register(username: str, email: str, password: str):
-    if not await user_exists(username, email):
+async def register(username: str, password: str):
+    if not await user_exists(username):
         salt1 = ''.join([choice(choice([ascii_uppercase, ascii_lowercase, hexdigits, octdigits])) for _ in range(512)])
         salt2 = ''.join([choice(choice([ascii_uppercase, ascii_lowercase, hexdigits, octdigits])) for _ in range(512)])
         hashed_pass = sha256(''.join([salt1, password, salt2]).encode('utf-8')).hexdigest()
         await database.execute("""
-            INSERT INTO app.users (username, email, password_hash, salt1, salt2)
-            VALUES (:username, :email, :password_hash, :salt1, :salt2);
+            INSERT INTO app.users (username, password_hash, salt1, salt2)
+            VALUES (:username, :password_hash, :salt1, :salt2);
         """, {
             "username": username,
-            "email": email,
             "password_hash": hashed_pass,
             "salt1": salt1,
             "salt2": salt2

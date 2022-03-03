@@ -5,7 +5,6 @@
 | Field Name    | Data Type                |
 |---------------|--------------------------|
 | username      | varchar(50), primary_key |
-| email         | varchar(256)             |
 | password_hash | varchar(256)             |
 | salt1         | varchar(512)             |
 | salt2         | varchar(512)             |

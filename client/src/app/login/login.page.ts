@@ -9,7 +9,7 @@ import {Router} from "@angular/router";
 })
 export class LoginPage implements OnInit {
 
-  showRegister = true;
+  showRegister = false;
   showLogin = true;
 
   username: string = "";

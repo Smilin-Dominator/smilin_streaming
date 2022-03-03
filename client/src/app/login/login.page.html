@@ -9,16 +9,40 @@
 </ion-header>
 
 <ion-content>
+  <ion-toolbar>
+    <ion-segment value="login">
+      <ion-segment-button value="login" (click)="showRegister = false; showLogin = true;">Login</ion-segment-button>
+      <ion-segment-button value="register" (click)="showRegister = true; showLogin = false;">Register</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
   <ion-card [hidden]="!showLogin">
       <ion-title>Login</ion-title>
-      <ion-input [(ngModel)]="username" type="text" placeholder="username"></ion-input>
-      <ion-input [(ngModel)]="password" type="text" placeholder="password"></ion-input>
-      <ion-button type="button" (click)="login()">Login</ion-button>
+
+      <ion-item>
+        <ion-label position="fixed">Username</ion-label>
+        <ion-input [(ngModel)]="username" type="text" placeholder="username"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="fixed">Password</ion-label>
+        <ion-input [(ngModel)]="password" type="text" placeholder="password"></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" type="button" (click)="login()">Login</ion-button>
   </ion-card>
   <ion-card [hidden]="!showRegister">
     <ion-title>Register</ion-title>
-    <ion-input [(ngModel)]="username" type="text" placeholder="username"></ion-input>
-    <ion-input [(ngModel)]="password" type="text" placeholder="password"></ion-input>
-    <ion-button type="button" (click)="register()">Register</ion-button>
+
+    <ion-item>
+      <ion-label position="fixed">Username</ion-label>
+      <ion-input [(ngModel)]="username" type="text" placeholder="username"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="fixed">Username</ion-label>
+      <ion-input [(ngModel)]="password" type="text" placeholder="password"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="button" (click)="register()">Register</ion-button>
   </ion-card>
 </ion-content>

@@ -103,13 +103,16 @@ async def artist_check(username: str):
 
 @app.post("/users/login")
 async def user_login(password: str, username: str):
-    hash, salt1, salt2 = await database.fetch_one(
-        "SELECT password_hash, salt1, salt2 FROM users WHERE username = :username;", {"username": username}
-    )
-    new_hash = sha256(''.join([salt1, password, salt2]).encode('utf-8')).hexdigest()
-    if new_hash == hash:
-        return User(username=username, password_hash=hash)
-    else:
+    try:
+        hash, salt1, salt2 = await database.fetch_one(
+            "SELECT password_hash, salt1, salt2 FROM users WHERE username = :username;", {"username": username}
+        )
+        new_hash = sha256(''.join([salt1, password, salt2]).encode('utf-8')).hexdigest()
+        if new_hash == hash:
+            return User(username=username, password_hash=hash)
+        else:
+            return False
+    except TypeError:
         return False
 
 

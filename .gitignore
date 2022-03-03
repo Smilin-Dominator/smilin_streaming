@@ -12,3 +12,4 @@ __pycache__/
 
 # Program Data
 server/db/
+server/songs/

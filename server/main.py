@@ -202,3 +202,19 @@ async def add_song(name: str, song: str, user: User = Depends(login)):
         "date": datetime.now()
     })
     return True
+
+
+@app.post("/playlists/songs/delete")
+async def remove_song(name: str, song: str, user: User = Depends(login)):
+    playlist_table = await database.fetch_one(f"SELECT table_name FROM {user.username}.playlists WHERE name = :name", {
+        "name": name
+    })
+    song_id = await database.fetch_one(f"SELECT id FROM songs.songs WHERE songs.name = :song", {
+        "song": song
+    })
+    if (not song_id) or (not playlist_table):
+        return False
+    await database.execute(f"DELETE FROM {user.username}.{playlist_table[0]} WHERE song_id = :id", {
+        "id": song_id[0]
+    })
+    return True

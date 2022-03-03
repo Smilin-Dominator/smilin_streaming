@@ -9,7 +9,7 @@ import {Router} from "@angular/router";
 })
 export class LoginPage implements OnInit {
 
-  showRegister = false;
+  showRegister = true;
   showLogin = true;
 
   username: string = "";
@@ -20,6 +20,21 @@ export class LoginPage implements OnInit {
   login() {
     if (this.username.length != 0 && this.password.length != 0) {
       this.http.post("/api/users/login", null, {
+        params: {
+          "username": this.username,
+          "password": this.password
+        }
+      }).forEach(e => {
+        if (e != false) {
+          this.router.navigate(['/home']).then()
+        }
+      })
+    }
+  }
+
+  register() {
+    if (this.username.length != 0 && this.password.length != 0) {
+      this.http.post("/api/users/register", null, {
         params: {
           "username": this.username,
           "password": this.password

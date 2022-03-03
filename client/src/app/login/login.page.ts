@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -7,11 +9,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginPage implements OnInit {
 
-  constructor() {
+  showRegister = false;
+  showLogin = true;
 
+  username: string = "";
+  password: string = "";
+
+  constructor(private http: HttpClient, private router: Router) {}
+
+  login() {
+    if (this.username.length != 0 && this.password.length != 0) {
+      this.http.post("/api/users/login", null, {
+        params: {
+          "username": this.username,
+          "password": this.password
+        }
+      }).forEach(e => {
+        if (e != false) {
+          this.router.navigate(['/home']).then()
+        }
+      })
+    }
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
 }

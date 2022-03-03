@@ -2,12 +2,17 @@
   <ion-toolbar>
     <ion-buttons>
       <ion-title>Login</ion-title>
-      <ion-button>Home</ion-button>
-      <ion-button>Playlists</ion-button>
+      <ion-button routerLink="/home">Home</ion-button>
+      <ion-button routerLink="/playlists">Playlists</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-card [hidden]="!showLogin">
+      <ion-title>Login</ion-title>
+      <ion-input [(ngModel)]="username" type="text" placeholder="username"></ion-input>
+      <ion-input [(ngModel)]="password" type="text" placeholder="password"></ion-input>
+      <ion-button type="button" (click)="login()">Login</ion-button>
+  </ion-card>
 </ion-content>

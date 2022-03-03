@@ -8,6 +8,7 @@ from string import ascii_lowercase, ascii_uppercase, hexdigits, octdigits
 from random import choice
 from hashlib import sha256
 from datetime import datetime
+from typing import Union
 
 app = FastAPI()
 DATABASE_URL = "mysql+pymysql://root:override@localhost/app"
@@ -224,11 +225,42 @@ async def remove_song(name: str, song: str, user: User = Depends(login)):
 
 
 @app.get("/songs/listen")
-async def listen(song: str, _: User = Depends(login)):
-    filename = await database.fetch_one(f"SELECT filename FROM songs.songs WHERE songs.name = :song", {
+async def listen(song: str, user: User = Depends(login)):
+
+    async def update_song_history():
+        listen_count = await database.fetch_one(f"SELECT listen_count FROM {user.username}.song_history WHERE song_id = :id", {
+            "id": song_id
+        })
+        if listen_count is None:
+            await database.execute(f"INSERT INTO {user.username}.song_history VALUES (:sid, 1)", {
+                "sid": song_id
+            })
+        else:
+            await database.execute(f"UPDATE {user.username}.song_history SET listen_count = :lc WHERE song_id = :sid", {
+                "lc": listen_count[0] + 1,
+                "sid": song_id
+            })
+
+    async def update_artist_history():
+        listen_count = await database.fetch_one(f"SELECT listen_count FROM {user.username}.artist_history WHERE artist_id = :id", {
+            "id": artist_id
+        })
+        if listen_count is None:
+            await database.execute(f"INSERT INTO {user.username}.artist_history VALUES (:aid, 1)", {
+                "aid": artist_id
+            })
+        else:
+            await database.execute(f"UPDATE {user.username}.artist_history SET listen_count = :lc WHERE artist_id = :aid", {
+                "lc": listen_count[0] + 1,
+                "aid": artist_id
+            })
+
+    song_id, filename, artist_id = await database.fetch_one(f"SELECT id, filename, artist_id FROM songs.songs WHERE songs.name = :song", {
         "song": song
     })
     if filename is None:
         return False
-    return FileResponse(path=filename[0])
+    await update_song_history()
+    await update_artist_history()
+    return FileResponse(path=filename)
 

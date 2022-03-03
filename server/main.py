@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends
+from fastapi.responses import FileResponse
 from pathlib import Path
 from databases import Database as Db
 from sqlalchemy import create_engine
@@ -220,3 +221,14 @@ async def remove_song(name: str, song: str, user: User = Depends(login)):
         "id": song_id[0]
     })
     return True
+
+
+@app.get("/songs/listen")
+async def listen(song: str, _: User = Depends(login)):
+    filename = await database.fetch_one(f"SELECT filename FROM songs.songs WHERE songs.name = :song", {
+        "song": song
+    })
+    if filename is None:
+        return False
+    return FileResponse(path=filename[0])
+

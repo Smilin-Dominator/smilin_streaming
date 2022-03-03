@@ -6,6 +6,7 @@ from formats import User
 from string import ascii_lowercase, ascii_uppercase, hexdigits, octdigits
 from random import choice
 from hashlib import sha256
+from datetime import datetime
 
 app = FastAPI()
 DATABASE_URL = "mysql+pymysql://root:override@localhost/app"
@@ -183,4 +184,21 @@ async def drop_playlist(name: str, user: User = Depends(login)):
         return False
     await database.execute(f"DROP TABLE {user.username}.{table_name[0]};")
     await database.execute(f"DELETE FROM {user.username}.playlists WHERE name = {name};")
+    return True
+
+
+@app.post("/playlists/songs/add")
+async def add_song(name: str, song: str, user: User = Depends(login)):
+    playlist_table = await database.fetch_one(f"SELECT table_name FROM {user.username}.playlists WHERE name = :name", {
+        "name": name
+    })
+    song_id = await database.fetch_one(f"SELECT id FROM songs.songs WHERE songs.name = :song", {
+        "song": song
+    })
+    if (not song_id) or (not playlist_table):
+        return False
+    await database.execute(f"INSERT INTO {user.username}.{playlist_table[0]} VALUES (:sid, :date)", {
+        "sid": song_id[0],
+        "date": datetime.now()
+    })
     return True

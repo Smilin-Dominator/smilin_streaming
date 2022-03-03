@@ -136,7 +136,7 @@ async def list_playlists(user: User = Depends(login)):
     return await database.fetch_all(f"SELECT name FROM {user.username}.playlists")
 
 
-@app.get("/playlists/create")
+@app.post("/playlists/create")
 async def create_playlist(name: str, user: User = Depends(login)):
     exists = await database.fetch_one(f"SELECT name FROM {user.username}.playlists WHERE name = :name", {
         "name": name
@@ -175,7 +175,7 @@ async def describe_playlist(name: str, user: User = Depends(login)):
     """)
 
 
-@app.get("/playlists/delete")
+@app.post("/playlists/delete")
 async def drop_playlist(name: str, user: User = Depends(login)):
     table_name = await database.fetch_one(f"SELECT table_name FROM {user.username}.playlists WHERE name = :name", {
         "name": name

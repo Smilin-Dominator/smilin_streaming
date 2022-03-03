@@ -78,7 +78,7 @@ async def user_check(username: str, email: str):
 
 
 @app.post("/users/login")
-async def login(password: str, username: str):
+async def user_login(password: str, username: str):
     hash, salt1, salt2, email = await database.fetch_one(
         "SELECT password_hash, salt1, salt2, email FROM users WHERE username = :username;", {"username": username}
     )
@@ -133,12 +133,12 @@ async def register(username: str, email: str, password: str):
 
 
 @app.get("/playlists/list")
-async def list_playlists(user: User = Depends(login)):
+async def list_playlists(user: User = Depends(user_login)):
     return await database.fetch_all(f"SELECT name FROM {user.username}.playlists")
 
 
 @app.post("/playlists/create")
-async def create_playlist(name: str, user: User = Depends(login)):
+async def create_playlist(name: str, user: User = Depends(user_login)):
     exists = await database.fetch_one(f"SELECT name FROM {user.username}.playlists WHERE name = :name", {
         "name": name
     })
@@ -161,7 +161,7 @@ async def create_playlist(name: str, user: User = Depends(login)):
 
 
 @app.get("/playlists/get")
-async def describe_playlist(name: str, user: User = Depends(login)):
+async def describe_playlist(name: str, user: User = Depends(user_login)):
     table_name = await database.fetch_one(f"SELECT table_name FROM {user.username}.playlists WHERE name = :name", {
         "name": name
     })
@@ -177,7 +177,7 @@ async def describe_playlist(name: str, user: User = Depends(login)):
 
 
 @app.post("/playlists/delete")
-async def drop_playlist(name: str, user: User = Depends(login)):
+async def drop_playlist(name: str, user: User = Depends(user_login)):
     table_name = await database.fetch_one(f"SELECT table_name FROM {user.username}.playlists WHERE name = :name", {
         "name": name
     })
@@ -189,7 +189,7 @@ async def drop_playlist(name: str, user: User = Depends(login)):
 
 
 @app.post("/playlists/songs/add")
-async def add_song(name: str, song: str, user: User = Depends(login)):
+async def add_song(name: str, song: str, user: User = Depends(user_login)):
     playlist_table = await database.fetch_one(f"SELECT table_name FROM {user.username}.playlists WHERE name = :name", {
         "name": name
     })
@@ -209,7 +209,7 @@ async def add_song(name: str, song: str, user: User = Depends(login)):
 
 
 @app.post("/playlists/songs/delete")
-async def remove_song(name: str, song: str, user: User = Depends(login)):
+async def remove_song(name: str, song: str, user: User = Depends(user_login)):
     playlist_table = await database.fetch_one(f"SELECT table_name FROM {user.username}.playlists WHERE name = :name", {
         "name": name
     })
@@ -225,7 +225,7 @@ async def remove_song(name: str, song: str, user: User = Depends(login)):
 
 
 @app.get("/songs/listen")
-async def listen(song: str, user: User = Depends(login)):
+async def listen(song: str, user: User = Depends(user_login)):
 
     async def update_song_history():
         listen_count = await database.fetch_one(f"SELECT listen_count FROM {user.username}.song_history WHERE song_id = :id", {

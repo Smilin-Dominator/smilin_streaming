@@ -93,3 +93,19 @@
 |-------------|--------------------------------------------------------------|
 | Parameters  | name (string), song (string), user (User)                    |
 | Description | This deletes a song from the specified playlist if it exists |
+
+## /songs<hr>
+
+#### /songs/listen
+
+| Field       | Values                     |
+|-------------|----------------------------|
+| Parameters  | song (string), user (User) |
+| Description | This returns the song file |
+
+#### /songs/upload
+
+| Field       | Values                                                                                              |
+|-------------|-----------------------------------------------------------------------------------------------------|
+| Parameters  | song_name (string), album (string), genre (string), filename (string), song (File), artist (Artist) |
+| Description | This deletes a song from the specified playlist if it exists                                        |

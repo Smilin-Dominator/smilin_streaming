@@ -7,3 +7,4 @@ mysqlclient
 sqlalchemy
 pydantic
 aiofiles
+python-multipart

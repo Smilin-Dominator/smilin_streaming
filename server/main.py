@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, File, UploadFile
 from fastapi.responses import FileResponse
 from pathlib import Path
 from databases import Database as Db
@@ -8,6 +8,7 @@ from string import ascii_lowercase, ascii_uppercase, hexdigits, octdigits
 from random import choice
 from hashlib import sha256
 from datetime import datetime
+from shutil import copyfileobj
 
 app = FastAPI()
 DATABASE_URL = "mysql+pymysql://root:override@localhost/app"
@@ -323,3 +324,18 @@ async def listen(song: str, user: User = Depends(user_login)):
     await update_artist_history()
     return FileResponse(path=filename)
 
+
+@app.post("/songs/upload")
+async def upload_song(song_name: str, album: str, genre: str, filename: str, song: UploadFile = File(...), artist: Artist = Depends(artist_login)):
+    path = Path("songs").joinpath(filename)
+    with open(path, "wb") as w:
+        copyfileobj(song.file, w)
+    await database.execute(
+        "INSERT INTO songs.songs(name, artist_id, album, genre, filename) VALUES(:name, :aid, :album, :genre, :filename)", {
+          "name": song_name,
+          "aid": artist.id,
+          "album": album,
+          "genre": genre,
+          "filename": str(path)
+        })
+    return True

@@ -195,7 +195,10 @@ async def add_song(name: str, song: str, user: User = Depends(login)):
     song_id = await database.fetch_one(f"SELECT id FROM songs.songs WHERE songs.name = :song", {
         "song": song
     })
-    if (not song_id) or (not playlist_table):
+    exists = await database.fetch_one(f"SELECT song_id FROM {user.username}.{playlist_table[0]} WHERE song_id = :id", {
+        "id": song_id[0]
+    })
+    if (not song_id) or (not playlist_table) or exists:
         return False
     await database.execute(f"INSERT INTO {user.username}.{playlist_table[0]} VALUES (:sid, :date)", {
         "sid": song_id[0],

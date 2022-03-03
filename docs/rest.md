@@ -6,15 +6,15 @@
 
 | Field       | Values                                                                                        |
 |-------------|-----------------------------------------------------------------------------------------------|
-| Parameters  | username (string), email (string)                                                             |
-| Description | This returns 'false' if a user with the email or username doesn't exist and 'true' if it does |
+| Parameters  | username (string)                                                                             |
+| Description | This returns 'false' if a user with the provided username doesn't exist and 'true' if it does |
 
 #### /users/register
 
-| Field       | Values                                                                                                   |
-|-------------|----------------------------------------------------------------------------------------------------------|
-| Parameters  | username (string), email (string), password (string)                                                     |
-| Description | This checks if a user with the given email or username doesn't exist, and if it doesn't creates the user |
+| Field       | Values                                                                                          |
+|-------------|-------------------------------------------------------------------------------------------------|
+| Parameters  | username (string), password (string)                                                            |
+| Description | This checks if a user with the given username doesn't exist, and if it doesn't creates the user |
 
 #### /users/login
 
@@ -22,6 +22,30 @@
 |-------------|-------------------------------------------------------|
 | Parameters  | username (string), password (string)                  |
 | Description | This returns a User Object if the password is correct |
+
+
+## /artists<hr>
+
+#### /artists/exists
+
+| Field       | Values                                                                                           |
+|-------------|--------------------------------------------------------------------------------------------------|
+| Parameters  | username (string)                                                                                |
+| Description | This returns 'false' if an artist with the provided username doesn't exist and 'true' if it does |
+
+#### /artists/register
+
+| Field       | Values                                                                                                |
+|-------------|-------------------------------------------------------------------------------------------------------|
+| Parameters  | username (string), password (string)                                                                  |
+| Description | This checks if an artists with the given username doesn't exist, and if it doesn't creates the artist |
+
+#### /artists/login
+
+| Field       | Values                                                   |
+|-------------|----------------------------------------------------------|
+| Parameters  | username (string), password (string)                     |
+| Description | This returns an Artist Object if the password is correct |
 
 
 ## /playlists<hr>

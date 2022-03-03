@@ -3,7 +3,7 @@ from fastapi.responses import FileResponse
 from pathlib import Path
 from databases import Database as Db
 from sqlalchemy import create_engine
-from formats import User
+from formats import User, Artist
 from string import ascii_lowercase, ascii_uppercase, hexdigits, octdigits
 from random import choice
 from hashlib import sha256
@@ -31,6 +31,16 @@ async def user_exists(username: str):
         return False
 
 
+async def artist_exists(username: str):
+    result = await database.fetch_one("SELECT username FROM artists WHERE username = :username", {
+        "username": username
+    })
+    if result:
+        return True
+    else:
+        return False
+
+
 @app.on_event("startup")
 async def start_db():
     await database.connect()
@@ -46,11 +56,21 @@ async def start_db():
                 salt2 VARCHAR(512)
             );
             
+            CREATE TABLE IF NOT EXISTS app.artists (
+                username VARCHAR(50) PRIMARY KEY,
+                `name` VARCHAR(256),
+                password_hash VARCHAR(256),
+                salt1 VARCHAR(512),
+                salt2 VARCHAR(512)
+            );
+            
             CREATE DATABASE IF NOT EXISTS songs;
           
             CREATE TABLE IF NOT EXISTS songs.artists (
                 id INT PRIMARY KEY AUTO_INCREMENT,
-                name VARCHAR(256)
+                `name` VARCHAR(256),
+                followers INT
+                FOREIGN KEY (`name`) REFERENCES app.artists(`name`)
             );
           
             CREATE TABLE IF NOT EXISTS songs.songs (
@@ -75,6 +95,11 @@ async def user_check(username: str):
     return await user_exists(username)
 
 
+@app.get("/artists/exists")
+async def artist_check(username: str):
+    return await artist_exists(username)
+
+
 @app.post("/users/login")
 async def user_login(password: str, username: str):
     hash, salt1, salt2 = await database.fetch_one(
@@ -83,6 +108,18 @@ async def user_login(password: str, username: str):
     new_hash = sha256(''.join([salt1, password, salt2]).encode('utf-8')).hexdigest()
     if new_hash == hash:
         return User(username=username, password_hash=hash)
+    else:
+        return False
+
+
+@app.post("/artists/login")
+async def artist_login(password: str, username: str):
+    hash, salt1, salt2 = await database.fetch_one(
+        "SELECT password_hash, salt1, salt2 FROM artists WHERE username = :username;", {"username": username}
+    )
+    new_hash = sha256(''.join([salt1, password, salt2]).encode('utf-8')).hexdigest()
+    if new_hash == hash:
+        return Artist(username=username, password_hash=new_hash)
     else:
         return False
 
@@ -127,6 +164,29 @@ async def register(username: str, password: str):
         return "Success!"
     else:
         return "User Already Exists!"
+
+
+@app.post("/artists/register")
+async def register_artist(name: str, username: str, password: str):
+    if not await artist_exists(username):
+        salt1 = ''.join([choice(choice([ascii_uppercase, ascii_lowercase, hexdigits, octdigits])) for _ in range(512)])
+        salt2 = ''.join([choice(choice([ascii_uppercase, ascii_lowercase, hexdigits, octdigits])) for _ in range(512)])
+        hashed_pass = sha256(''.join([salt1, password, salt2]).encode('utf-8')).hexdigest()
+        await database.execute("""
+            INSERT INTO app.artists (username, password_hash, salt1, salt2)
+            VALUES (:username, :password_hash, :salt1, :salt2);
+        """, {
+            "name": name,
+            "username": username,
+            "password_hash": hashed_pass,
+            "salt1": salt1,
+            "salt2": salt2
+        })
+        await database.execute(f"INSERT INTO songs.artists VALUES (:name, 0)", {
+            "name": name
+        })
+    else:
+        return "Artist Already Exists!"
 
 
 @app.get("/playlists/list")

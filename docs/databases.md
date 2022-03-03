@@ -9,6 +9,16 @@
 | salt1         | varchar(512)             |
 | salt2         | varchar(512)             |
 
+### artists
+
+| Field Name    | Data Type                |
+|---------------|--------------------------|
+| username      | varchar(50), primary_key |
+| name          | varchar(256)             |
+| password_hash | varchar(256)             |
+| salt1         | varchar(512)             |
+| salt2         | varchar(512)             |
+
 # Database For Each User (x)
 
 ### playlists
@@ -44,10 +54,11 @@
 
 ### artists
 
-| Field Name | Data Type        |
-|------------|------------------|
-| id         | int, primary_key |
-| name       | varchar(256)     |
+| Field Name | Data Type                                         |
+|------------|---------------------------------------------------|
+| id         | int, primary_key                                  |
+| name       | varchar(256), foreign key (ref. app.artists.name) |
+| followers  | int                                               |
 
 ### songs
 

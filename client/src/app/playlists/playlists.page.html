@@ -10,5 +10,11 @@
 </ion-header>
 
 <ion-content>
-
+  <ion-split-pane>
+    <ion-menu>
+      <ion-header *ngFor="let playlist of playlists">
+        <ion-toolbar>{{ playlist.name }}</ion-toolbar>
+      </ion-header>
+    </ion-menu>
+  </ion-split-pane>
 </ion-content>

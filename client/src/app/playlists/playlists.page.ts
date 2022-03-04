@@ -1,5 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
+import {HttpClient} from "@angular/common/http";
+
+type Playlists = {
+  "name": string
+}[];
+
+type Playlist = {
+  "name": string,
+  "artist": string,
+  "date": string
+}
 
 @Component({
   selector: 'app-playlists',
@@ -11,7 +22,22 @@ export class PlaylistsPage implements OnInit {
   public username: string;
   public password: string;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  public playlist_name: string;
+  public playlist: Playlist;
+  public playlists: Playlists;
+
+  constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient) {}
+
+  getPlaylists() {
+    this.http.get("/api/playlists/list", {
+      params: {
+        "username": this.username,
+        "password": this.password,
+      }
+    }).forEach(e => {
+      this.playlists = e! as Playlists;
+    }).then()
+  }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -20,6 +46,7 @@ export class PlaylistsPage implements OnInit {
       if (this.username == undefined || this.password == undefined) {
         this.router.navigate(['/login']).then();
       }
+      this.getPlaylists();
     })
   }
 

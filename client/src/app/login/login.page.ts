@@ -26,9 +26,14 @@ export class LoginPage implements OnInit {
         }
       }).forEach(e => {
         if (e != false) {
-          this.router.navigate(['/home', this.username, this.password]).then()
+          this.router.navigate(['/home'], {
+            queryParams: {
+              "username": this.username,
+              "password": this.password
+            }
+          }).then()
         }
-      })
+      }).then()
     }
   }
 
@@ -41,9 +46,14 @@ export class LoginPage implements OnInit {
         }
       }).forEach(e => {
         if (e != false) {
-          this.router.navigate(['/home', this.username, this.password]).then()
+          this.router.navigate(['/home'], {
+            queryParams: {
+              "username": this.username,
+              "password": this.password
+            }
+          }).then()
         }
-      })
+      }).then()
     }
   }
 

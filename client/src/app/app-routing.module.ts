@@ -5,7 +5,7 @@ import {LoginPage} from "./login/login.page";
 
 const routes: Routes = [
   {
-    path: 'home/:username/:password',
+    path: 'home',
     component: HomePage
   },
   {

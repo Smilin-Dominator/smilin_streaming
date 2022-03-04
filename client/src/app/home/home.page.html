@@ -3,7 +3,7 @@
     <ion-buttons>
       <ion-title>Home</ion-title>
       <ion-button [routerLink]="['/playlists']" [queryParams]="{'username': username, 'password': password}">Playlists</ion-button>
-      <ion-button [routerLink]="['/login']">Login</ion-button>
+      <ion-button [routerLink]="['/login']" [queryParams]="{'username': username, 'password': password}">Login</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

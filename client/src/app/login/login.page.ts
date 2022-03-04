@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -11,11 +11,12 @@ export class LoginPage implements OnInit {
 
   showRegister = false;
   showLogin = true;
+  showHeader = false;
 
   username: string = "";
   password: string = "";
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {}
 
   login() {
     if (this.username.length != 0 && this.password.length != 0) {
@@ -57,6 +58,14 @@ export class LoginPage implements OnInit {
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.username = params['username'];
+      this.password = params['password'];
+      if (this.username != undefined || this.password != undefined) {
+        this.showHeader = true;
+      }
+    })
+  }
 
 }

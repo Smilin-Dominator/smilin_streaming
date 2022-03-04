@@ -10,9 +10,15 @@ import {LoginPage} from "./login/login.page";
 import {HomePage} from "./home/home.page";
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
+import {PlaylistsPage} from "./playlists/playlists.page";
 
 @NgModule({
-  declarations: [AppComponent, LoginPage, HomePage],
+  declarations: [
+    AppComponent,
+    LoginPage,
+    HomePage,
+    PlaylistsPage
+  ],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, FormsModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],

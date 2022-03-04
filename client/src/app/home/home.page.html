@@ -1,8 +1,10 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-buttons>
+      <ion-title>Home</ion-title>
+      <ion-button [routerLink]="['/playlists']" [queryParams]="{'username': username, 'password': password}">Playlists</ion-button>
+      <ion-button [routerLink]="['/login']">Login</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

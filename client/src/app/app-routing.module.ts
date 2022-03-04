@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import {HomePage} from "./home/home.page";
 import {LoginPage} from "./login/login.page";
+import {PlaylistsPage} from "./playlists/playlists.page";
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
+  },
+  {
+    path: 'playlists',
+    component: PlaylistsPage
   },
 ];
 

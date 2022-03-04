@@ -10,11 +10,10 @@
 </ion-header>
 
 <ion-content>
-  <ion-split-pane>
-    <ion-menu>
-      <ion-header *ngFor="let playlist of playlists">
-        <ion-toolbar>{{ playlist.name }}</ion-toolbar>
-      </ion-header>
+  <ion-split-pane contentId="playlist_menu">
+    <ion-menu contentId="playlist_menu" type="overlay">
+      <ion-button *ngFor="let playlist of playlists" (click)="describePlaylist(playlist.name)">{{ playlist.name }}</ion-button>
     </ion-menu>
+    <ion-router-outlet id="playlist_menu"></ion-router-outlet>
   </ion-split-pane>
 </ion-content>

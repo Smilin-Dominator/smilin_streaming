@@ -22,7 +22,6 @@ export class PlaylistsPage implements OnInit {
   public username: string;
   public password: string;
 
-  public playlist_name: string;
   public playlist: Playlist;
   public playlists: Playlists;
 
@@ -36,6 +35,18 @@ export class PlaylistsPage implements OnInit {
       }
     }).forEach(e => {
       this.playlists = e! as Playlists;
+    }).then()
+  }
+
+  describePlaylist(playlist: string) {
+    this.http.get("/api/playlists/get", {
+      params: {
+        "username": this.username,
+        "password": this.password,
+        "name": playlist
+      }
+    }).forEach(e => {
+      this.playlist = e! as Playlist;
     }).then()
   }
 

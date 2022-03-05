@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
+import {HttpClient} from "@angular/common/http";
+
+type Playlists = {
+  "name": string
+}[]
 
 @Component({
   selector: 'app-home',
@@ -11,7 +16,20 @@ export class HomePage implements OnInit {
   username: string;
   password: string;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  playlists: Playlists;
+
+  constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient) {}
+
+  getPlaylists() {
+    this.http.get("/api/playlists/list", {
+      params: {
+        "username": this.username,
+        "password": this.password,
+      }
+    }).forEach(e => {
+      this.playlists = e! as Playlists;
+    }).then()
+  }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -21,6 +39,7 @@ export class HomePage implements OnInit {
         this.router.navigate(['/login']).then();
       }
     })
+    this.getPlaylists()
   }
 
 }

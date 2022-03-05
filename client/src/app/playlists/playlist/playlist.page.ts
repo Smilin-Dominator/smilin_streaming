@@ -53,6 +53,21 @@ export class PlaylistPage implements OnInit {
     })
   }
 
+  removeSong(song: string) {
+    this.http.post("/api/playlists/songs/delete", null, {
+      params: {
+        "username": this.username,
+        "password": this.password,
+        "name": this.playlist_name,
+        "song": song
+      }
+    }).forEach(e => {
+      if (e) {
+        this.describePlaylist();
+      }
+    }).then()
+  }
+
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.password = params['password'];

@@ -247,7 +247,9 @@ async def drop_playlist(name: str, user: User = Depends(user_login)):
     if not table_name:
         return False
     await database.execute(f"DROP TABLE {user.username}.{table_name[0]};")
-    await database.execute(f"DELETE FROM {user.username}.playlists WHERE name = {name};")
+    await database.execute(f"DELETE FROM {user.username}.playlists WHERE name = :name;", {
+        "name": name
+    })
     return True
 
 

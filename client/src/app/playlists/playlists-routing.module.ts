@@ -6,7 +6,13 @@ import { PlaylistsPage } from './playlists.page';
 const routes: Routes = [
   {
     path: '',
-    component: PlaylistsPage
+    component: PlaylistsPage,
+    children: [
+      {
+        path: ":playlist",
+        loadChildren: () => import('./playlist/playlist.module').then(m => m.PlaylistPageModule)
+      }
+    ]
   }
 ];
 

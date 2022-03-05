@@ -6,12 +6,6 @@ type Playlists = {
   "name": string
 }[];
 
-type Playlist = {
-  "name": string,
-  "artist": string,
-  "date": string
-}
-
 @Component({
   selector: 'app-playlists',
   templateUrl: './playlists.page.html',
@@ -21,8 +15,6 @@ export class PlaylistsPage implements OnInit {
 
   public username: string;
   public password: string;
-
-  public playlist: Playlist;
   public playlists: Playlists;
 
   constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient) {}
@@ -35,18 +27,6 @@ export class PlaylistsPage implements OnInit {
       }
     }).forEach(e => {
       this.playlists = e! as Playlists;
-    }).then()
-  }
-
-  describePlaylist(playlist: string) {
-    this.http.get("/api/playlists/get", {
-      params: {
-        "username": this.username,
-        "password": this.password,
-        "name": playlist
-      }
-    }).forEach(e => {
-      this.playlist = e! as Playlist;
     }).then()
   }
 

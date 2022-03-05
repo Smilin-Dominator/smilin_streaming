@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ playlist_name }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>Name</ion-col>
+      <ion-col>Artist</ion-col>
+      <ion-col>Date</ion-col>
+      <ion-col>Operations</ion-col>
+    </ion-row>
+    <ion-row *ngFor="let song of playlist">
+      <ion-col>{{song.name}}</ion-col>
+      <ion-col>{{song.artist}}</ion-col>
+      <ion-col>{{song.date}}</ion-col>
+      <ion-col>
+        <ion-button>Listen</ion-button>
+        <ion-button>Delete</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

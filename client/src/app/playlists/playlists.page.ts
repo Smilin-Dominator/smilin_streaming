@@ -17,6 +17,8 @@ export class PlaylistsPage implements OnInit {
   public password: string;
   public playlists: Playlists;
 
+  public new_playlist_name: string;
+
   constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient) {}
 
   getPlaylists() {
@@ -28,6 +30,22 @@ export class PlaylistsPage implements OnInit {
     }).forEach(e => {
       this.playlists = e! as Playlists;
     }).then()
+  }
+
+  createPlaylist() {
+    if (this.new_playlist_name.length != 0) {
+      this.http.post("/api/playlists/create", null, {
+        params: {
+          "username": this.username,
+          "password": this.password,
+          "name": this.new_playlist_name
+        }
+      }).forEach(e => {
+        if (e) {
+          this.getPlaylists();
+        }
+      }).then()
+    }
   }
 
   ngOnInit() {

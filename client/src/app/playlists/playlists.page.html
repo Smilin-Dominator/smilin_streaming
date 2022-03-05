@@ -12,11 +12,19 @@
 <ion-content>
   <ion-split-pane contentId="playlist_menu">
     <ion-menu contentId="playlist_menu" type="overlay">
-      <ion-button
-        *ngFor="let playlist of playlists"
-        [routerLink]="['/playlists', playlist.name]"
-        [queryParams]="{'username': username, 'password': password}"
-      >{{ playlist.name }}</ion-button>
+      <ion-list>
+        <ion-item>
+          <ion-label>Playlist Name</ion-label>
+          <ion-input [(ngModel)]="new_playlist_name" maxlength="50"></ion-input>
+          <ion-button (click)="createPlaylist()">Create</ion-button>
+        </ion-item>
+        <ion-item *ngFor="let playlist of playlists">
+          <ion-button
+            [routerLink]="['/playlists', playlist.name]"
+            [queryParams]="{'username': username, 'password': password}"
+          >{{ playlist.name }}</ion-button>
+        </ion-item>
+      </ion-list>
     </ion-menu>
     <ion-router-outlet id="playlist_menu"></ion-router-outlet>
   </ion-split-pane>

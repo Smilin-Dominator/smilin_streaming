@@ -18,7 +18,7 @@ export class PlaylistPage implements OnInit {
   username: string;
   password: string;
   playlist_name: string;
-  playlist: Playlist;
+  playlist: Playlist = [];
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) { }
 

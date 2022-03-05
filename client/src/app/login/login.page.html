@@ -12,11 +12,12 @@
 <ion-content>
   <ion-toolbar>
     <ion-segment value="login">
-      <ion-segment-button value="login" (click)="showRegister = false; showLogin = true;">Login</ion-segment-button>
-      <ion-segment-button value="register" (click)="showRegister = true; showLogin = false;">Register</ion-segment-button>
+      <ion-segment-button value="login" (click)="login = true">Login</ion-segment-button>
+      <ion-segment-button value="register" (click)="login = false">Register</ion-segment-button>
     </ion-segment>
   </ion-toolbar>
-  <ion-card [hidden]="!showLogin">
+
+  <ion-card [hidden]="!login"> <!-- The User Login -->
       <ion-title>Login</ion-title>
 
       <ion-item>
@@ -29,9 +30,10 @@
         <ion-input [(ngModel)]="password" type="text" placeholder="password"></ion-input>
       </ion-item>
 
-      <ion-button expand="block" type="button" (click)="login()">Login</ion-button>
+      <ion-button expand="block" type="button" (click)="user_login()">Login</ion-button>
   </ion-card>
-  <ion-card [hidden]="!showRegister">
+
+  <ion-card [hidden]="login"> <!-- The User Register -->
     <ion-title>Register</ion-title>
 
     <ion-item>
@@ -44,6 +46,6 @@
       <ion-input [(ngModel)]="password" type="text" placeholder="password"></ion-input>
     </ion-item>
 
-    <ion-button expand="block" type="button" (click)="register()">Register</ion-button>
+    <ion-button expand="block" type="button" (click)="user_register()">Register</ion-button>
   </ion-card>
 </ion-content>

@@ -9,8 +9,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class LoginPage implements OnInit {
 
-  showRegister = false;
-  showLogin = true;
+  login = true;
+  artist = false;
   showHeader = false;
 
   username: string = "";
@@ -18,7 +18,7 @@ export class LoginPage implements OnInit {
 
   constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {}
 
-  login() {
+  user_login() {
     if (this.username.length != 0 && this.password.length != 0) {
       this.http.post("/api/users/login", null, {
         params: {
@@ -38,7 +38,7 @@ export class LoginPage implements OnInit {
     }
   }
 
-  register() {
+  user_register() {
     if (this.username.length != 0 && this.password.length != 0) {
       this.http.post("/api/users/register", null, {
         params: {

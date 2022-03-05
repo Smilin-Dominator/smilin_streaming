@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid>
+  <ion-grid *ngIf="playlist">
     <ion-row>
       <ion-col>Name</ion-col>
       <ion-col>Artist</ion-col>
@@ -22,4 +22,12 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  <h1 *ngIf="!playlist">No songs yet!</h1>
 </ion-content>
+
+<ion-footer>
+  <ion-buttons>
+    <ion-button>Add Song</ion-button>
+    <ion-button>Delete Playlist</ion-button>
+  </ion-buttons>
+</ion-footer>

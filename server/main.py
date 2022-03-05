@@ -236,7 +236,7 @@ async def describe_playlist(name: str, user: User = Depends(user_login)):
             date_added AS date 
         FROM {user.username}.{table_name[0]} 
             INNER JOIN songs.songs ON songs.songs.id = song_id
-            INNER JOIN songs.artists ON songs.songs.id = songs.artists.id;
+            INNER JOIN songs.artists ON songs.artists.id = songs.songs.artist_id;
     """)
 
 

@@ -9,12 +9,14 @@
     <ion-row>
       <ion-col>Name</ion-col>
       <ion-col>Artist</ion-col>
+      <ion-col>Album</ion-col>
       <ion-col>Date</ion-col>
       <ion-col>Operations</ion-col>
     </ion-row>
     <ion-row *ngFor="let song of playlist">
       <ion-col>{{song.name}}</ion-col>
       <ion-col>{{song.artist}}</ion-col>
+      <ion-col>{{song.album}}</ion-col>
       <ion-col>{{song.date}}</ion-col>
       <ion-col>
         <ion-button>Listen</ion-button>

@@ -232,6 +232,7 @@ async def describe_playlist(name: str, user: User = Depends(user_login)):
         SELECT 
             songs.songs.name AS name,
             songs.artists.name AS artist,
+            songs.songs.album AS album,
             date_added AS date 
         FROM {user.username}.{table_name[0]} 
             INNER JOIN songs.songs ON songs.songs.id = song_id

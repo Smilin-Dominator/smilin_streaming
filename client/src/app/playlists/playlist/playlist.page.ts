@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 type Playlist = {
   "name": string,
   "artist": string,
+  "album": string
   "date": string
 }[]
 

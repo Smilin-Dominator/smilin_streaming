@@ -33,7 +33,7 @@ export class PlaylistsPage implements OnInit {
   }
 
   createPlaylist() {
-    if (this.new_playlist_name.length != 0) {
+    if (this.new_playlist_name.length != undefined) {
       this.http.post("/api/playlists/create", null, {
         params: {
           "username": this.username,

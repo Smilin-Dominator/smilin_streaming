@@ -29,6 +29,9 @@
 
 <ion-footer>
   <ion-toolbar *ngIf="song">
+    <ion-header id="player_song_header">
+      {{ song.name }}
+    </ion-header>
     <ion-row class="ion-text-center">
       <ion-col>
         <ion-button>
@@ -36,16 +39,8 @@
         </ion-button>
       </ion-col>
       <ion-col>
-        <ion-button (click)="pause()">
+        <ion-button (click)="toggle()">
           <ion-icon name="pause-sharp"></ion-icon>
-        </ion-button>
-      </ion-col>
-      <ion-col>
-        {{ song.name }}
-      </ion-col>
-      <ion-col>
-        <ion-button (click)="play()">
-          <ion-icon name="play-sharp"></ion-icon>
         </ion-button>
       </ion-col>
       <ion-col>

@@ -98,19 +98,23 @@ export class PlaylistPage implements OnInit {
       format: 'mp3',
       xhr: {
         method: 'GET',
+      },
+      onplay: () => {
+        this.isPlaying = true;
+        this.song = song;
       }
     })
     this.player.play()
-    this.isPlaying = true;
-    this.song = song;
   }
 
-  pause() {
-    this.player.pause()
-  }
-
-  play() {
-    this.player.play()
+  toggle() {
+    if (this.isPlaying) {
+      this.player.pause();
+      this.isPlaying = false;
+    } else {
+      this.player.play();
+      this.isPlaying = true;
+    }
   }
 
   ngOnInit() {

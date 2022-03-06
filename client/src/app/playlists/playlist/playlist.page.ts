@@ -1,14 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import { Howl } from "howler";
+import {IonRange} from '@ionic/angular';
 
-type Playlist = {
+type Song = {
   "name": string,
   "artist": string,
   "album": string
   "date": string
-}[]
+}
+
+type Playlist = Song[];
 
 @Component({
   selector: 'app-playlist',
@@ -21,7 +24,13 @@ export class PlaylistPage implements OnInit {
   password: string;
   playlist_name: string;
   playlist: Playlist = [];
+
   player: Howl;
+  public song: Song;
+  public isPlaying = false;
+  public progress = 0;
+  @ViewChild('range', {static: false}) range: IonRange;
+
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) { }
 
@@ -71,15 +80,17 @@ export class PlaylistPage implements OnInit {
     }).then()
   }
 
-  playSong(song: string) {
+  playSong(song: Song) {
 
     const spaces = (a: string) => {
       return a.replaceAll(" ", "%20")
     }
 
-    let url = `/api/songs/listen?username=${spaces(this.username)}&password=${spaces(this.password)}&song=${spaces(song)}`
+    let url = `/api/songs/listen?username=${spaces(this.username)}&password=${spaces(this.password)}&song=${spaces(song.name)}`
 
     if (this.player) {
+      this.isPlaying = false;
+      this.song = undefined;
       this.player.stop()
     }
     this.player = new Howl({
@@ -90,7 +101,16 @@ export class PlaylistPage implements OnInit {
       }
     })
     this.player.play()
+    this.isPlaying = true;
+    this.song = song;
+  }
 
+  pause() {
+    this.player.pause()
+  }
+
+  play() {
+    this.player.play()
   }
 
   ngOnInit() {

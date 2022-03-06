@@ -19,7 +19,7 @@
       <ion-col>{{song.album}}</ion-col>
       <ion-col>{{song.date}}</ion-col>
       <ion-col>
-        <ion-button (click)="playSong(song.name)">Listen</ion-button>
+        <ion-button (click)="playSong(song)">Listen</ion-button>
         <ion-button (click)="removeSong(song.name)">Delete</ion-button>
       </ion-col>
     </ion-row>
@@ -28,6 +28,33 @@
 </ion-content>
 
 <ion-footer>
+  <ion-toolbar *ngIf="song">
+    <ion-row class="ion-text-center">
+      <ion-col>
+        <ion-button>
+          <ion-icon name="play-skip-back-sharp"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button (click)="pause()">
+          <ion-icon name="pause-sharp"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        {{ song.name }}
+      </ion-col>
+      <ion-col>
+        <ion-button (click)="play()">
+          <ion-icon name="play-sharp"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button>
+          <ion-icon name="play-skip-forward-sharp"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
   <ion-buttons>
     <ion-button>Add Song</ion-button>
     <ion-button (click)="deletePlaylist()">Delete Playlist</ion-button>

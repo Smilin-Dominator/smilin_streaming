@@ -102,6 +102,12 @@ export class PlaylistPage implements OnInit {
       onplay: () => {
         this.isPlaying = true;
         this.song = song;
+        this.updateProgress();
+      },
+      onend: () => {
+        this.isPlaying = false;
+        this.song = undefined;
+        this.progress = 0;
       }
     })
     this.player.play()
@@ -115,6 +121,18 @@ export class PlaylistPage implements OnInit {
       this.player.play();
       this.isPlaying = true;
     }
+  }
+
+  seek() {
+    const newValue = + this.range.value;
+    const duration = this.player.duration();
+    this.player.seek(duration * (newValue / 100));
+  }
+
+  updateProgress() {
+    const seek: number = this.player.seek();
+    this.progress = (seek / this.player.duration()) * 100 || 0;
+    setTimeout(() => this.updateProgress(), 1000);
   }
 
   ngOnInit() {

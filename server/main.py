@@ -359,7 +359,7 @@ async def upload_song(song_name: str, album: str, genre: str, filename: str, son
 
 @app.get("/songs/recommend/previous")
 async def recommend_previous(user: User = Depends(user_login)):
-    return await database.fetch_all(f"""
+    out = await database.fetch_all(f"""
         SELECT songs.songs.name AS name,
             songs.artists.name AS artist, 
             songs.songs.album AS album
@@ -369,3 +369,36 @@ async def recommend_previous(user: User = Depends(user_login)):
          ORDER BY {user.username}.song_history.listen_count
          LIMIT 5
     """)
+    if not out:
+        return False
+    else:
+        return out
+
+
+@app.get("/songs/recommend/artists")
+async def recommended_from_artists(user: User = Depends(user_login)):
+    artists = await database.fetch_all(f"""
+        SELECT {user.username}.following.artist_id, {user.username}.artist_history.listen_count 
+        FROM {user.username}.following 
+        INNER JOIN {user.username}.artist_history ON {user.username}.artist_history.artist_id = {user.username}.following.artist_id
+        ORDER BY listen_count 
+        LIMIT 3;
+    """)
+    if not artists:
+        return False
+    else:
+        out = []
+        query = f"""
+            SELECT songs.songs.name AS name,
+                songs.artists.name AS artist, 
+                songs.songs.album AS album
+            FROM songs.songs
+            INNER JOIN songs.artists ON songs.artists.id = artist_id
+            WHERE artist_id = :id
+             ORDER BY songs.songs.listen_count
+             LIMIT 2 
+        """
+        for aid in artists[0]:
+            out.append(await database.fetch_all(query, {"id": aid}))
+        return out[0]
+

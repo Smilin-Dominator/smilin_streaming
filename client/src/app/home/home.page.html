@@ -23,33 +23,40 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card>
+  <ion-card *ngIf="listen_again">
     <ion-card-header>Listen Again</ion-card-header>
     <ion-card-content>
-    <ion-list>
-      <ion-item>
-        <ion-grid>
-          <ion-row>
-            <ion-col>Name</ion-col>
-            <ion-col>Artist</ion-col>
-            <ion-col>Album</ion-col>
-          </ion-row>
-          <ion-row *ngFor="let song of listen_again">
-            <ion-col>{{song.name}}</ion-col>
-            <ion-col>{{song.artist}}</ion-col>
-            <ion-col>{{song.album}}</ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-item>
-    </ion-list>
+      <ion-grid>
+        <ion-row>
+          <ion-col>Name</ion-col>
+          <ion-col>Artist</ion-col>
+          <ion-col>Album</ion-col>
+        </ion-row>
+        <ion-row *ngFor="let song of listen_again">
+          <ion-col>{{song.name}}</ion-col>
+          <ion-col>{{song.artist}}</ion-col>
+          <ion-col>{{song.album}}</ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-card-content>
   </ion-card>
 
 
-  <ion-card>
+  <ion-card *ngIf="artists">
     <ion-card-header>Songs From Artists You Follow</ion-card-header>
     <ion-card-content>
-
+      <ion-grid>
+        <ion-row>
+          <ion-col>Name</ion-col>
+          <ion-col>Artist</ion-col>
+          <ion-col>Album</ion-col>
+        </ion-row>
+        <ion-row *ngFor="let song of artists">
+          <ion-col>{{song.name}}</ion-col>
+          <ion-col>{{song.artist}}</ion-col>
+          <ion-col>{{song.album}}</ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-card-content>
   </ion-card>
 

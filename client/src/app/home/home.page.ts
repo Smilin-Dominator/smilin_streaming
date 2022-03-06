@@ -23,7 +23,8 @@ export class HomePage implements OnInit {
   password: string;
 
   playlists: Playlists;
-  listen_again: Song[];
+  listen_again: Song[] | boolean;
+  artists: Song[] | boolean;
 
   constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient) {}
 
@@ -45,8 +46,31 @@ export class HomePage implements OnInit {
         "password": this.password,
       }
     }).forEach(e => {
-      this.listen_again = e! as Song[];
+      if (e) {
+        this.listen_again = e! as Song[];
+      } else {
+        this.listen_again = false;
+      }
     }).then()
+  }
+
+  fromArtists() {
+    this.http.get("/api/songs/recommend/artists", {
+      params: {
+        "username": this.username,
+        "password": this.password,
+      }
+    }).forEach(e => {
+      if (e) {
+        this.artists = e! as Song[];
+      } else {
+        this.artists = false;
+      }
+    }).then()
+  }
+
+  validate(obj: boolean | Song[]) {
+    return typeof obj != "boolean";
   }
 
   ngOnInit() {
@@ -59,6 +83,7 @@ export class HomePage implements OnInit {
     })
     this.getPlaylists()
     this.listenAgain()
+    this.fromArtists()
   }
 
 }

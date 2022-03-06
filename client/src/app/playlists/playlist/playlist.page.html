@@ -19,7 +19,7 @@
       <ion-col>{{song.album}}</ion-col>
       <ion-col>{{song.date}}</ion-col>
       <ion-col>
-        <ion-button>Listen</ion-button>
+        <ion-button (click)="playSong(song.name)">Listen</ion-button>
         <ion-button (click)="removeSong(song.name)">Delete</ion-button>
       </ion-col>
     </ion-row>

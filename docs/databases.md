@@ -43,7 +43,14 @@
 | artist_id    | int, foreign_key (ref. songs.artists.id) |
 | listen_count | int                                      |
 
-### playlist_x
+### following
+
+| Field Name   | Data Type                                |
+|--------------|------------------------------------------|
+| artist_id    | int, foreign_key (ref. songs.artists.id) |
+
+
+### playlist_xxx
 
 | Field Name | Data Type                                             |
 |------------|-------------------------------------------------------|
@@ -62,12 +69,13 @@
 
 ### songs
 
-| Field Name | Data Type                                |
-|------------|------------------------------------------|
-| id         | int, primary_key                         |
-| name       | varchar(128)                             |
-| artist_id  | int, foreign_key (ref. songs.artists.id) |
-| album      | varchar(256)                             |
-| genre      | varchar(20)                              |
-| filename   | varchar(256)                             |
+| Field Name   | Data Type                                |
+|--------------|------------------------------------------|
+| id           | int, primary_key                         |
+| name         | varchar(128)                             |
+| artist_id    | int, foreign_key (ref. songs.artists.id) |
+| album        | varchar(256)                             |
+| genre        | varchar(20)                              |
+| filename     | varchar(256)                             |
+| listen_count | int                                      |
 

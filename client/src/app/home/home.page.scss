@@ -25,3 +25,27 @@
 #container a {
   text-decoration: none;
 }
+
+ion-grid {
+  --ion-grid-column-padding: 10px;
+  border-collapse: collapse;
+  border-style: hidden;
+
+  ion-row:first-child {
+    background-color:  #2dd36f;
+    font-weight: bold;
+  }
+  ion-col {
+    border: 1px solid black;
+    text-align: center;
+    border-bottom: 0;
+    border-right: 0;
+  }
+  ion-col:last-child {
+    border-right: 1px solid black;
+  }
+
+  ion-row:last-child {
+    border-bottom: 1px solid black;
+  }
+}

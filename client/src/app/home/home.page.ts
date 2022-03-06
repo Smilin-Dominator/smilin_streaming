@@ -6,7 +6,6 @@ type Song = {
   "name": string,
   "artist": string,
   "album": string
-  "date": string
 }
 
 type Playlists = {
@@ -24,6 +23,7 @@ export class HomePage implements OnInit {
   password: string;
 
   playlists: Playlists;
+  listen_again: Song[];
 
   constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient) {}
 
@@ -38,6 +38,17 @@ export class HomePage implements OnInit {
     }).then()
   }
 
+  listenAgain() {
+    this.http.get("/api/songs/recommend/previous", {
+      params: {
+        "username": this.username,
+        "password": this.password,
+      }
+    }).forEach(e => {
+      this.listen_again = e! as Song[];
+    }).then()
+  }
+
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.username = params['username'];
@@ -47,6 +58,7 @@ export class HomePage implements OnInit {
       }
     })
     this.getPlaylists()
+    this.listenAgain()
   }
 
 }

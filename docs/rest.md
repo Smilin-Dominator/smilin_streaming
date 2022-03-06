@@ -109,3 +109,10 @@
 |-------------|-----------------------------------------------------------------------------------------------------|
 | Parameters  | song_name (string), album (string), genre (string), filename (string), song (File), artist (Artist) |
 | Description | This deletes a song from the specified playlist if it exists                                        |
+
+#### /songs/recommend/previous
+
+| Field       | Values                                                                             |
+|-------------|------------------------------------------------------------------------------------|
+| Parameters  | user (User)                                                                        |
+| Description | This returns a list of songs the user has listened to, ordered by the listen count |

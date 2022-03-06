@@ -81,6 +81,7 @@ async def start_db():
                  album VARCHAR(256),
                  genre VARCHAR(20),
                  filename VARCHAR(256),
+                 listen_count INT,
                  FOREIGN KEY (artist_id) REFERENCES songs.artists(id)
             );        
         """)
@@ -163,6 +164,11 @@ async def register(username: str, password: str):
             CREATE TABLE {username}.playlists (
                 name VARCHAR(250) PRIMARY KEY,
                 table_name VARCHAR(256)
+            )
+            
+            CREATE TABLE {username}.following (
+                artist_id INT PRIMARY KEY,
+                FOREIGN KEY (artist_id) REFERENCES songs.artists(id)
             )
                         
         """)
@@ -302,10 +308,12 @@ async def listen(song: str, user: User = Depends(user_login)):
                 "sid": song_id
             })
         else:
-            await database.execute(f"UPDATE {user.username}.song_history SET listen_count = :lc WHERE song_id = :sid", {
-                "lc": listen_count[0] + 1,
+            await database.execute(f"UPDATE {user.username}.song_history SET listen_count = listen_count + 1 WHERE song_id = :sid", {
                 "sid": song_id
             })
+        await database.execute(f"UPDATE songs.songs SET listen_count = listen_count + 1 WHERE id = :id", {
+            "id": song_id
+        })
 
     async def update_artist_history():
         listen_count = await database.fetch_one(f"SELECT listen_count FROM {user.username}.artist_history WHERE artist_id = :id", {
@@ -326,9 +334,10 @@ async def listen(song: str, user: User = Depends(user_login)):
     })
     if filename is None:
         return False
-    await update_song_history()
-    await update_artist_history()
-    return FileResponse(path=filename)
+    else:
+        await update_song_history()
+        await update_artist_history()
+        return FileResponse(path=filename)
 
 
 @app.post("/songs/upload")
@@ -337,11 +346,26 @@ async def upload_song(song_name: str, album: str, genre: str, filename: str, son
     with open(path, "wb") as w:
         copyfileobj(song.file, w)
     await database.execute(
-        "INSERT INTO songs.songs(name, artist_id, album, genre, filename) VALUES(:name, :aid, :album, :genre, :filename)", {
+        "INSERT INTO songs.songs(name, artist_id, album, genre, filename, listen_count) VALUES(:name, :aid, :album, :genre, :filename, :listen_count)", {
           "name": song_name,
           "aid": artist.id,
           "album": album,
           "genre": genre,
-          "filename": str(path)
+          "filename": str(path),
+          "listen_count": 0
         })
     return True
+
+
+@app.get("/songs/recommend/previous")
+async def recommend_previous(user: User = Depends(user_login)):
+    return await database.fetch_all(f"""
+        SELECT songs.songs.name AS name,
+            songs.artists.name AS artist, 
+            songs.songs.album AS album
+        FROM {user.username}.song_history
+            INNER JOIN songs.songs ON songs.songs.id = song_id
+            INNER JOIN songs.artists ON songs.artists.id = songs.songs.artist_id
+         ORDER BY {user.username}.song_history.listen_count
+         LIMIT 5
+    """)

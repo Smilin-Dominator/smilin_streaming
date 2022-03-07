@@ -465,8 +465,10 @@ async def toggle_follow(name: str, user: User = Depends(user_login)):
     exists = await database.fetch_one(f"SELECT artist_id AS following FROM {user.username}.following WHERE artist_id = {id};")
     if exists:
         await database.execute(f"DELETE FROM {user.username}.following WHERE artist_id = {id};")
+        await database.execute(f"UPDATE songs.artists SET followers = followers - 1 WHERE id = {id};")
     else:
         await database.execute(f"INSERT INTO {user.username}.following VALUES ({id});")
+        await database.execute(f"UPDATE songs.artists SET followers = followers + 1 WHERE id = {id};")
     return True
 
 

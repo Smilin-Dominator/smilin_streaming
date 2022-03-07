@@ -423,8 +423,9 @@ async def get_song(name: str, user: User = Depends(user_login)):
 
 
 @app.get("/artists/get")
-async def get_artist(name: str):
+async def get_artist(name: str, user: User = Depends(user_login)):
     id = (await database.fetch_one(f"SELECT id FROM songs.artists WHERE name = '{name}'"))[0]
+    following = await database.fetch_one(f"SELECT artist_id AS following FROM {user.username}.following WHERE artist_id = {id};")
     return [
         await database.fetch_all(f"""
             SELECT artists.name AS name,
@@ -438,7 +439,8 @@ async def get_artist(name: str):
         await database.fetch_all(f"""
             SELECT name, listen_count, album, genre FROM songs.songs AS top_songs WHERE artist_id = {id} ORDER BY listen_count LIMIT 5;
         """),
-        await database.fetch_one(f"SELECT SUM(listen_count) AS total_listens FROM songs.songs WHERE artist_id = {id}")
+        await database.fetch_one(f"SELECT SUM(listen_count) AS total_listens FROM songs.songs WHERE artist_id = {id}"),
+        True if following else False
     ]
 
 
@@ -455,3 +457,14 @@ async def return_results(query: str):
         SELECT DISTINCT album AS album FROM songs.songs WHERE songs.album LIKE '%{query}%';
     """))
     return ops
+
+
+@app.post("/users/toggle_follow")
+async def toggle_follow(name: str, user: User = Depends(user_login)):
+    id: int = (await database.fetch_one(f"SELECT id FROM songs.artists WHERE name = '{name}'"))[0]
+    exists = await database.fetch_one(f"SELECT artist_id AS following FROM {user.username}.following WHERE artist_id = {id};")
+    if exists:
+        await database.execute(f"DELETE FROM {user.username}.following WHERE artist_id = {id};")
+    else:
+        await database.execute(f"INSERT INTO {user.username}.following VALUES ({id});")
+    return True

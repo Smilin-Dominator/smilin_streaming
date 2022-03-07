@@ -58,4 +58,18 @@
       </ion-grid>
     </ion-card-content>
   </ion-card>
+  <ion-card *ngIf="description">
+    <ion-card-content>
+      <h1>Operations</h1>
+      <ion-list>
+        <ion-item>
+          <ion-label>Follow</ion-label>
+          <ion-button (click)="toggleFollow()">
+            <ion-text *ngIf="!description[4]">Follow</ion-text>
+            <ion-text *ngIf="description[4]">Unfollow</ion-text>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

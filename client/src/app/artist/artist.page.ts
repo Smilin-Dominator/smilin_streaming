@@ -18,6 +18,9 @@ type Description = [
   }[],
   {
     total_listens: number
+  },
+  {
+    following: boolean
   }
 ]
 
@@ -30,14 +33,27 @@ export class ArtistPage implements OnInit {
 
   username: string;
   password: string;
+  artist: string;
   public description: Description;
 
   constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient) { }
 
-  describeArtist(artist: string) {
+  toggleFollow() {
+    this.http.post("/api/users/toggle_follow", null, {
+      params: {
+        "username": this.username,
+        "password": this.password,
+        "name": this.artist
+      }
+    }).forEach(_ => {}).then(() => this.describeArtist())
+  }
+
+  describeArtist() {
     this.http.get("/api/artists/get", {
       params: {
-        "name": artist
+        "username": this.username,
+        "password": this.password,
+        "name": this.artist
       }
     }).forEach(e => {
       this.description = e! as Description
@@ -49,11 +65,11 @@ export class ArtistPage implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.password = params['password'];
       this.username = params['username'];
-      let artist = this.route.snapshot.paramMap.get("artist")
-      if (this.username == undefined || this.password == undefined || artist == undefined) {
+      this.artist = this.route.snapshot.paramMap.get("artist")
+      if (this.username == undefined || this.password == undefined || this.artist == undefined) {
         this.router.navigate(['/login']).then();
       }
-      this.describeArtist(artist)
+      this.describeArtist()
     })
   }
 

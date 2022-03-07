@@ -28,9 +28,9 @@
         <ion-item *ngIf="autocomplete[1]">
           <ion-label>Artists</ion-label>
           <ion-list>
-            <ion-item *ngFor="let song of autocomplete[1]">
-              <ion-label>{{song.artist}}</ion-label>
-            </ion-item>
+            <ion-button *ngFor="let song of autocomplete[1]">
+              <ion-label [routerLink]="['/artist', song.artist]" [queryParams]="{'username': username, 'password': password}">{{song.artist}}</ion-label>
+            </ion-button>
           </ion-list>
         </ion-item>
         <ion-item *ngIf="autocomplete[2]">

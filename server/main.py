@@ -433,7 +433,7 @@ async def get_artist(name: str):
             WHERE id = {id};
         """),
         await database.fetch_all(f"""
-            SELECT DISTINCT album AS albums FROM songs.songs WHERE artist_id = {id};
+            SELECT DISTINCT album AS album FROM songs.songs WHERE artist_id = {id};
         """),
         await database.fetch_all(f"""
             SELECT name, listen_count, album, genre FROM songs.songs AS top_songs WHERE artist_id = {id} ORDER BY listen_count LIMIT 5;

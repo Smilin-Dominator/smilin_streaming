@@ -54,7 +54,14 @@
 | Parameters  | username (string), password (string)                     |
 | Description | This returns an Artist Object if the password is correct |
 
-#### /artists/get
+#### /artists/get/artist
+
+| Field       | Values                                                   |
+|-------------|----------------------------------------------------------|
+| Parameters  | name (string), artist (Artist)                           |
+| Description | This describes the artist using the artists' credentials |
+
+#### /artists/get/user
 
 | Field       | Values                     |
 |-------------|----------------------------|

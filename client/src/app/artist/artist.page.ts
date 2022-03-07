@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 
-type Description = [
+type DescriptionForUser = [
   {
     name: string,
     followers: number
@@ -24,6 +24,25 @@ type Description = [
   }
 ]
 
+type DescriptionForArtist = [
+  {
+    name: string,
+    followers: number
+  },
+  {
+    album: string
+  }[],
+  {
+    "name": string,
+    "listen_count": number,
+    "album": string,
+    "genre": string
+  }[],
+  {
+    total_listens: number
+  }
+]
+
 @Component({
   selector: 'app-artist',
   templateUrl: './artist.page.html',
@@ -35,7 +54,7 @@ export class ArtistPage implements OnInit {
   password: string;
   artist: string;
   isArtist: boolean;
-  public description: Description;
+  public description: DescriptionForUser | DescriptionForArtist;
 
   uploadFile: File;
   uploadSongname: string;
@@ -55,16 +74,28 @@ export class ArtistPage implements OnInit {
   }
 
   describeArtist() {
-    this.http.get("/api/artists/get", {
-      params: {
-        "username": this.username,
-        "password": this.password,
-        "name": this.artist
-      }
-    }).forEach(e => {
-      this.description = e! as Description
-      console.log(this.description)
-    }).then()
+    if (this.isArtist) {
+      this.http.get("/api/artists/get/artist", {
+        params: {
+          "username": this.username,
+          "password": this.password,
+        }
+      }).forEach(e => {
+        this.description = e! as DescriptionForArtist
+        console.log(this.description)
+      }).then()
+    } else {
+      this.http.get("/api/artists/get/user", {
+        params: {
+          "username": this.username,
+          "password": this.password,
+          "name": this.artist
+        }
+      }).forEach(e => {
+        this.description = e! as DescriptionForUser
+        console.log(this.description)
+      }).then()
+    }
   }
 
   loadFile(event) {
@@ -76,9 +107,9 @@ export class ArtistPage implements OnInit {
     const not_empty = (a: string) => {return a != "" && a != undefined};
 
     if (not_empty(this.uploadFile.name) && not_empty(this.uploadAlbum) && not_empty(this.uploadGenre) && not_empty(this.uploadSongname)) {
-      this.http.post("/api/songs/upload", {
-        "song": this.uploadFile
-      }, {
+      let form: FormData = new FormData();
+      form.append("song", this.uploadFile);
+      this.http.post("/api/songs/upload", form, {
         params: {
           "username": this.username,
           "password": this.password,
@@ -87,7 +118,7 @@ export class ArtistPage implements OnInit {
           "genre": this.uploadGenre,
           "filename": this.uploadFile.name
         }
-      }).forEach(_ => {}).then()
+      }).forEach(_ => {}).then(() => this.describeArtist())
     }
 
   }

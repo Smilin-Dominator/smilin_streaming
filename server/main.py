@@ -422,7 +422,7 @@ async def get_song(name: str, user: User = Depends(user_login)):
         return result
 
 
-@app.get("/artists/get")
+@app.get("/artists/get/user")
 async def get_artist(name: str, user: User = Depends(user_login)):
     id = (await database.fetch_one(f"SELECT id FROM songs.artists WHERE name = '{name}'"))[0]
     following = await database.fetch_one(f"SELECT artist_id AS following FROM {user.username}.following WHERE artist_id = {id};")
@@ -443,6 +443,25 @@ async def get_artist(name: str, user: User = Depends(user_login)):
         True if following else False
     ]
 
+
+@app.get("/artists/get/artist")
+async def get_artist(artist: Artist = Depends(artist_login)):
+    id = (await database.fetch_one(f"SELECT id FROM songs.artists WHERE name = '{artist.name}'"))[0]
+    return [
+        await database.fetch_all(f"""
+            SELECT artists.name AS name,
+                artists.followers AS followers
+            FROM songs.artists
+            WHERE id = {id};
+        """),
+        await database.fetch_all(f"""
+            SELECT DISTINCT album AS album FROM songs.songs WHERE artist_id = {id};
+        """),
+        await database.fetch_all(f"""
+            SELECT name, listen_count, album, genre FROM songs.songs AS top_songs WHERE artist_id = {id} ORDER BY listen_count LIMIT 5;
+        """),
+        await database.fetch_one(f"SELECT SUM(listen_count) AS total_listens FROM songs.songs WHERE artist_id = {id}"),
+    ]
 
 @app.get("/autocomplete")
 async def return_results(query: str):

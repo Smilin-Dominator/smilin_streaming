@@ -80,6 +80,16 @@ export class PlaylistPage implements OnInit {
     }).then()
   }
 
+  nextSong() {
+    let current_index = this.playlist.indexOf(this.song);
+    console.log(current_index)
+    if (current_index + 1 > this.playlist.length - 1) {
+      this.playSong(this.playlist[0])
+    } else {
+      this.playSong(this.playlist[current_index + 1])
+    }
+  }
+
   playSong(song: Song) {
 
     const spaces = (a: string) => {
@@ -90,7 +100,6 @@ export class PlaylistPage implements OnInit {
 
     if (this.player) {
       this.isPlaying = false;
-      this.song = undefined;
       this.player.stop()
     }
     this.player = new Howl({
@@ -106,8 +115,8 @@ export class PlaylistPage implements OnInit {
       },
       onend: () => {
         this.isPlaying = false;
-        this.song = undefined;
         this.progress = 0;
+        this.nextSong();
       }
     })
     this.player.play()

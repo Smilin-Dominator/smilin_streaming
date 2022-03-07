@@ -42,7 +42,7 @@
           <ion-icon *ngIf="isPlaying" name="pause-sharp"></ion-icon>
           <ion-icon *ngIf="!isPlaying" name="play-sharp"></ion-icon>
         </ion-button>
-        <ion-button>
+        <ion-button (click)="nextSong()">
           <ion-icon name="play-skip-forward-sharp"></ion-icon>
         </ion-button>
       </ion-col>

@@ -402,3 +402,34 @@ async def recommended_from_artists(user: User = Depends(user_login)):
             out.append(await database.fetch_all(query, {"id": aid}))
         return out[0]
 
+
+@app.get("/songs/get")
+async def get_song(name: str, user: User = Depends(user_login)):
+    result = await database.fetch_one(f"""
+        SELECT songs.songs.name AS name,
+            songs.artists.name AS artist, 
+            songs.songs.album AS album
+        FROM {user.username}.song_history
+            INNER JOIN songs.songs ON songs.songs.id = song_id
+            INNER JOIN songs.artists ON songs.artists.id = songs.songs.artist_id
+        WHERE songs.name = :name;
+     """, {"name": name})
+    if not result:
+        return False
+    else:
+        return result
+
+
+@app.get("/autocomplete")
+async def return_results(query: str):
+    ops = []
+    ops.append(await database.fetch_all(f"""
+        SELECT name AS song FROM songs.songs WHERE name LIKE '%{query}%';
+    """))
+    ops.append(await database.fetch_all(f"""
+        SELECT name AS artist FROM songs.artists WHERE name LIKE '%{query}%';
+    """))
+    ops.append(await database.fetch_all(f"""
+        SELECT DISTINCT album AS album FROM songs.songs WHERE songs.album LIKE '%{query}%';
+    """))
+    return ops

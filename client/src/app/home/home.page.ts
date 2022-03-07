@@ -12,6 +12,18 @@ type Playlists = {
   "name": string
 }[]
 
+type AutoComplete = [
+  {
+    "song": string
+  }[],
+  {
+    "artist": string
+  }[],
+  {
+    "album": string
+  }[],
+]
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -25,6 +37,9 @@ export class HomePage implements OnInit {
   playlists: Playlists;
   listen_again: Song[] | boolean;
   artists: Song[] | boolean;
+
+  autocomplete: AutoComplete;
+  searchText: string;
 
   constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient) {}
 
@@ -71,6 +86,22 @@ export class HomePage implements OnInit {
 
   validate(obj: boolean | Song[]) {
     return typeof obj != "boolean";
+  }
+
+  autoComplete() {
+    if (this.searchText != "") {
+      this.http.get("/api/autocomplete", {
+        params: {
+          "query": this.searchText
+        }
+      }).forEach(e => {
+        if (e) {
+          this.autocomplete = e! as AutoComplete;
+        }
+      }).then()
+    } else {
+      this.autocomplete = null as AutoComplete;
+    }
   }
 
   ngOnInit() {

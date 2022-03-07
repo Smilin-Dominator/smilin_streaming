@@ -13,7 +13,7 @@
 
   <ion-card>
     <ion-card-header>
-      <ion-searchbar [(ngModel)]="searchText" (keyup)="autoComplete()"></ion-searchbar>
+      <ion-searchbar [(ngModel)]="searchText" (ngModelChange)="autoComplete()"></ion-searchbar>
     </ion-card-header>
     <ion-card-content *ngIf="autocomplete">
       <ion-list>

@@ -417,7 +417,15 @@ async def get_song(name: str, user: User = Depends(user_login)):
         WHERE songs.name = :name;
      """, {"name": name})
     if not result:
-        return False
+        return await database.fetch_one(f"""
+            SELECT songs.songs.name AS name,
+                songs.artists.name AS artist, 
+                songs.songs.album AS album,
+                songs.songs.genre AS genre
+            FROM songs.songs
+                INNER JOIN songs.artists ON songs.artists.id = songs.songs.artist_id
+            WHERE songs.name = :name;
+        """, {"name": name})
     else:
         return result
 

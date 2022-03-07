@@ -35,7 +35,7 @@
         <ion-range #range [(ngModel)]="progress" (touchend)="seek()" (mouseup)="seek()" max="100" color="success"></ion-range>
       </ion-col>
       <ion-col size="12">
-        <ion-button>
+        <ion-button (click)="previousSong()">
           <ion-icon name="play-skip-back-sharp"></ion-icon>
         </ion-button>
         <ion-button (click)="toggle()">

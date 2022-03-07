@@ -82,11 +82,19 @@ export class PlaylistPage implements OnInit {
 
   nextSong() {
     let current_index = this.playlist.indexOf(this.song);
-    console.log(current_index)
     if (current_index + 1 > this.playlist.length - 1) {
       this.playSong(this.playlist[0])
     } else {
       this.playSong(this.playlist[current_index + 1])
+    }
+  }
+
+  previousSong() {
+    let current_index = this.playlist.indexOf(this.song);
+    if (current_index - 1 < 0) {
+      this.playSong(this.playlist[this.playlist.length - 1])
+    } else {
+      this.playSong(this.playlist[current_index - 1])
     }
   }
 

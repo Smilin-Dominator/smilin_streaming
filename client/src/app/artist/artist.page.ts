@@ -34,7 +34,13 @@ export class ArtistPage implements OnInit {
   username: string;
   password: string;
   artist: string;
+  isArtist: boolean;
   public description: Description;
+
+  uploadFile: File;
+  uploadSongname: string;
+  uploadAlbum: string;
+  uploadGenre: string;
 
   constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient) { }
 
@@ -61,10 +67,36 @@ export class ArtistPage implements OnInit {
     }).then()
   }
 
+  loadFile(event) {
+    this.uploadFile = event.target.files[0];
+  }
+
+  uploadSong() {
+
+    const not_empty = (a: string) => {return a != "" && a != undefined};
+
+    if (not_empty(this.uploadFile.name) && not_empty(this.uploadAlbum) && not_empty(this.uploadGenre) && not_empty(this.uploadSongname)) {
+      this.http.post("/api/songs/upload", {
+        "song": this.uploadFile
+      }, {
+        params: {
+          "username": this.username,
+          "password": this.password,
+          "song_name": this.uploadSongname,
+          "album": this.uploadAlbum,
+          "genre": this.uploadGenre,
+          "filename": this.uploadFile.name
+        }
+      }).forEach(_ => {}).then()
+    }
+
+  }
+
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.password = params['password'];
       this.username = params['username'];
+      this.isArtist = params['artist'];
       this.artist = this.route.snapshot.paramMap.get("artist")
       if (this.username == undefined || this.password == undefined || this.artist == undefined) {
         this.router.navigate(['/login']).then();

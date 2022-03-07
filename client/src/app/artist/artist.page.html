@@ -69,6 +69,30 @@
             <ion-text *ngIf="description[4]">Unfollow</ion-text>
           </ion-button>
         </ion-item>
+        <ion-item *ngIf="isArtist">
+          <ion-label>Upload</ion-label>
+          <ion-list>
+            <ion-item>
+              <ion-label>File</ion-label>
+              <input type="file" (change)="loadFile($event)">
+            </ion-item>
+            <ion-item>
+              <ion-label>Song Name</ion-label>
+              <ion-input type="text" [(ngModel)]="uploadSongname"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>Album</ion-label>
+              <ion-input type="text" [(ngModel)]="uploadAlbum"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>Genre</ion-label>
+              <ion-input type="text" [(ngModel)]="uploadGenre"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-button (click)="uploadSong()">Submit</ion-button>
+            </ion-item>
+          </ion-list>
+        </ion-item>
       </ion-list>
     </ion-card-content>
   </ion-card>

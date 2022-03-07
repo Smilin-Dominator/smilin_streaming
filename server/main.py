@@ -408,7 +408,9 @@ async def get_song(name: str, user: User = Depends(user_login)):
     result = await database.fetch_one(f"""
         SELECT songs.songs.name AS name,
             songs.artists.name AS artist, 
-            songs.songs.album AS album
+            songs.songs.album AS album,
+            songs.songs.genre AS genre,
+            songs.songs.listen_count AS listen_count
         FROM {user.username}.song_history
             INNER JOIN songs.songs ON songs.songs.id = song_id
             INNER JOIN songs.artists ON songs.artists.id = songs.songs.artist_id

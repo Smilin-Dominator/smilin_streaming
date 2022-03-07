@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-title>Song</ion-title>
+      <ion-button [routerLink]="['/home']" [queryParams]="{'username': username, 'password': password}">Home</ion-button>
+      <ion-button [routerLink]="['/playlists']" [queryParams]="{'username': username, 'password': password}">Playlists</ion-button>
+      <ion-button [routerLink]="['/login']" [queryParams]="{'username': username, 'password': password}">Login</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="song">
+  <ion-card>
+    <ion-header>Details</ion-header>
+    <ion-grid>
+      <ion-row>
+        <ion-col>Name</ion-col>
+        <ion-col>Artist</ion-col>
+        <ion-col>Album</ion-col>
+        <ion-col>Genre</ion-col>
+        <ion-col>Listen Count</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>{{ song.name }}</ion-col>
+        <ion-col>{{ song.artist }}</ion-col>
+        <ion-col>{{ song.album }}</ion-col>
+        <ion-col>{{ song.genre }}</ion-col>
+        <ion-col>{{ song.listen_count }}</ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+  <ion-card>
+    <ion-header>Operations</ion-header>
+    <ion-list>
+      <ion-item>
+        <ion-label>Add To Playlist</ion-label>
+        <ion-select placeholder="Select A Playlist!" [(ngModel)]="selected_playlist" (ngModelChange)="addToPlaylist()">
+          <ion-select-option *ngFor="let pl of playlists">{{ pl.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+</ion-content>

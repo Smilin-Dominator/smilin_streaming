@@ -23,6 +23,13 @@
 | Parameters  | username (string), password (string)                  |
 | Description | This returns a User Object if the password is correct |
 
+#### /users/toggle_follow
+
+| Field       | Values                                                                                  |
+|-------------|-----------------------------------------------------------------------------------------|
+| Parameters  | name (string), username (string), password (string)                                     |
+| Description | This checks if the user is following the artist, if yes it unfollows, if no, it follows |
+
 
 ## /artists<hr>
 
@@ -47,6 +54,12 @@
 | Parameters  | username (string), password (string)                     |
 | Description | This returns an Artist Object if the password is correct |
 
+#### /artists/get
+
+| Field       | Values                     |
+|-------------|----------------------------|
+| Parameters  | name (string), user (User) |
+| Description | This describes the artist  |
 
 ## /playlists<hr>
 
@@ -103,6 +116,13 @@
 | Parameters  | song (string), user (User) |
 | Description | This returns the song file |
 
+#### /songs/get
+
+| Field       | Values                     |
+|-------------|----------------------------|
+| Parameters  | name (string), user (User) |
+| Description | This describes the song    |
+
 #### /songs/upload
 
 | Field       | Values                                                                                              |
@@ -116,3 +136,19 @@
 |-------------|------------------------------------------------------------------------------------|
 | Parameters  | user (User)                                                                        |
 | Description | This returns a list of songs the user has listened to, ordered by the listen count |
+
+#### /songs/recommend/artists
+
+| Field       | Values                                                       |
+|-------------|--------------------------------------------------------------|
+| Parameters  | user (User)                                                  |
+| Description | This returns a list of songs from 3 artists the user follows |
+
+
+## /autocomplete
+
+| Field       | Values                                                    |
+|-------------|-----------------------------------------------------------|
+| Parameters  | query (string)                                            |
+| Description | This returns a list of possible matches from the database |
+

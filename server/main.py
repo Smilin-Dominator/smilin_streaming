@@ -468,3 +468,18 @@ async def toggle_follow(name: str, user: User = Depends(user_login)):
     else:
         await database.execute(f"INSERT INTO {user.username}.following VALUES ({id});")
     return True
+
+
+@app.get("/albums/get")
+async def describe_album(name: str):
+    return [
+        await database.fetch_all(f"""
+            SELECT DISTINCT songs.artists.name 
+            FROM songs.songs 
+            INNER JOIN songs.artists ON songs.songs.artist_id = songs.artists.id
+            WHERE songs.songs.album = '{name}';
+        """),
+        await database.fetch_all(f"""
+                SELECT songs.songs.name, songs.songs.genre, songs.songs.listen_count FROM songs.songs WHERE album = '{name}';        
+        """)
+    ]

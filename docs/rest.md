@@ -145,6 +145,12 @@
 | Description | This returns a list of songs from 3 artists the user follows |
 
 
+## /albums/get
+| Field       | Values                     |
+|-------------|----------------------------|
+| Parameters  | name (string), user (User) |
+| Description | This describes the album   |
+
 ## /autocomplete
 
 | Field       | Values                                                    |

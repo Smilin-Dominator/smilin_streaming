@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-title>Album</ion-title>
+      <ion-button [routerLink]="['/home']" [queryParams]="{'username': username, 'password': password}">Home</ion-button>
+      <ion-button [routerLink]="['/playlists']" [queryParams]="{'username': username, 'password': password}">Playlists</ion-button>
+      <ion-button [routerLink]="['/login']" [queryParams]="{'username': username, 'password': password}">Login</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="album">
+    <ion-card-content>
+      <h1>Details</h1>
+      <ion-list>
+        <ion-item>
+          <ion-label>Album</ion-label>
+          <ion-label>{{ album_name }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>Artist</ion-label>
+          <ion-label>{{ album[0][0].name }}</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-card  *ngIf="album">
+    <ion-card-content>
+      <h1>Songs</h1>
+      <ion-grid>
+        <ion-row>
+          <ion-col>Name</ion-col>
+          <ion-col>Genre</ion-col>
+          <ion-col>Listen Count</ion-col>
+        </ion-row>
+        <ion-row *ngFor="let song of album[1]">
+          <ion-col>{{ song.name }}</ion-col>
+          <ion-col>{{ song.genre }}</ion-col>
+          <ion-col>{{ song.listen_count }}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

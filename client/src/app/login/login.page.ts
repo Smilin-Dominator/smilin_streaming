@@ -40,7 +40,7 @@ export class LoginPage implements OnInit {
   }
 
   artist_login() {
-    if (this.username.length != 0 && this.password.length != 0 && this.artist_name.length != 0) {
+    if (this.username.length != 0 && this.password.length != 0) {
       this.http.post("/api/artists/login", null, {
         params: {
           "username": this.username,

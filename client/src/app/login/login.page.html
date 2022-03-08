@@ -2,14 +2,21 @@
   <ion-toolbar>
     <ion-buttons>
       <ion-title>Login</ion-title>
-      <ion-button [hidden]="!showHeader" [routerLink]="['/home']" [queryParams]="{'username': username, 'password': password}">Home</ion-button>
-      <ion-button [hidden]="!showHeader" [routerLink]="['/playlists']" [queryParams]="{'username': username, 'password': password}">Playlists</ion-button>
-      <ion-button [hidden]="!showHeader" [routerLink]="['/login']" [queryParams]="{'username': username, 'password': password}">Login</ion-button>
+      <ion-button [hidden]="!showHeader && artist" [routerLink]="['/home']" [queryParams]="{'username': username, 'password': password}">Home</ion-button>
+      <ion-button [hidden]="!showHeader && artist" [routerLink]="['/playlists']" [queryParams]="{'username': username, 'password': password}">Playlists</ion-button>
+      <ion-button [hidden]="!showHeader && artist" [routerLink]="['/login']" [queryParams]="{'username': username, 'password': password}">Login</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-toolbar>
+    <ion-segment value="user">
+      <ion-segment-button value="user" (click)="artist = false">User</ion-segment-button>
+      <ion-segment-button value="artist" (click)="artist = true">Artist</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
   <ion-toolbar>
     <ion-segment value="login">
       <ion-segment-button value="login" (click)="login = true">Login</ion-segment-button>
@@ -17,8 +24,8 @@
     </ion-segment>
   </ion-toolbar>
 
-  <ion-card [hidden]="!login"> <!-- The User Login -->
-      <ion-title>Login</ion-title>
+  <ion-card [hidden]="!(login && !artist)"> <!-- The User Login -->
+      <ion-title>User Login</ion-title>
 
       <ion-item>
         <ion-label position="fixed">Username</ion-label>
@@ -33,8 +40,8 @@
       <ion-button expand="block" type="button" (click)="user_login()">Login</ion-button>
   </ion-card>
 
-  <ion-card [hidden]="login"> <!-- The User Register -->
-    <ion-title>Register</ion-title>
+  <ion-card [hidden]="!(!login && !artist)"> <!-- The User Register -->
+    <ion-title>User Register</ion-title>
 
     <ion-item>
       <ion-label position="fixed">Username</ion-label>
@@ -47,5 +54,44 @@
     </ion-item>
 
     <ion-button expand="block" type="button" (click)="user_register()">Register</ion-button>
+
   </ion-card>
+
+  <ion-card [hidden]="!(login && artist)"> <!-- The Artist Login -->
+    <ion-title>Artist Login</ion-title>
+
+    <ion-item>
+      <ion-label position="fixed">Username</ion-label>
+      <ion-input [(ngModel)]="username" type="text" placeholder="username"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="fixed">Password</ion-label>
+      <ion-input [(ngModel)]="password" type="text" placeholder="password"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="button" (click)="artist_login()">Login</ion-button>
+  </ion-card>
+
+  <ion-card [hidden]="!(!login && artist)"> <!-- The Artist Register -->
+    <ion-title>Artist Register</ion-title>
+
+    <ion-item>
+      <ion-label position="fixed">Name</ion-label>
+      <ion-input [(ngModel)]="artist_name" type="text" placeholder="name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="fixed">Username</ion-label>
+      <ion-input [(ngModel)]="username" type="text" placeholder="username"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="fixed">Password</ion-label>
+      <ion-input [(ngModel)]="password" type="text" placeholder="password"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="button" (click)="artist_register()">Register</ion-button>
+  </ion-card>
+
 </ion-content>

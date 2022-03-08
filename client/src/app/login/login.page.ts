@@ -13,6 +13,7 @@ export class LoginPage implements OnInit {
   artist = false;
   showHeader = false;
 
+  artist_name: string = "";
   username: string = "";
   password: string = "";
 
@@ -38,6 +39,49 @@ export class LoginPage implements OnInit {
     }
   }
 
+  artist_login() {
+    if (this.username.length != 0 && this.password.length != 0 && this.artist_name.length != 0) {
+      this.http.post("/api/artists/login", null, {
+        params: {
+          "username": this.username,
+          "password": this.password
+        }
+      }).forEach(e => {
+        if (e != false) {
+          this.router.navigate(['/artist', this.artist_name], {
+            queryParams: {
+              "username": this.username,
+              "password": this.password,
+              "artist": true
+            }
+          }).then()
+        }
+      }).then()
+    }
+  }
+
+  artist_register() {
+    if (this.username.length != 0 && this.password.length != 0 && this.artist_name.length != 0) {
+      this.http.post("/api/artists/register", null, {
+        params: {
+          "name": this.artist_name,
+          "username": this.username,
+          "password": this.password
+        }
+      }).forEach(e => {
+        if (e != false) {
+          this.router.navigate(['/artist', this.artist_name], {
+            queryParams: {
+              "username": this.username,
+              "password": this.password,
+              "artist": true
+            }
+          }).then()
+        }
+      }).then()
+    }
+  }
+
   user_register() {
     if (this.username.length != 0 && this.password.length != 0) {
       this.http.post("/api/users/register", null, {
@@ -50,7 +94,8 @@ export class LoginPage implements OnInit {
           this.router.navigate(['/home'], {
             queryParams: {
               "username": this.username,
-              "password": this.password
+              "password": this.password,
+              "artist": true
             }
           }).then()
         }
@@ -62,6 +107,7 @@ export class LoginPage implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.username = params['username'];
       this.password = params['password'];
+      this.artist = params['artist'] as boolean;
       if (this.username != undefined || this.password != undefined) {
         this.showHeader = true;
       }

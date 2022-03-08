@@ -2,9 +2,9 @@
   <ion-toolbar>
     <ion-buttons>
       <ion-title>Login</ion-title>
-      <ion-button [hidden]="!showHeader && artist" [routerLink]="['/home']" [queryParams]="{'username': username, 'password': password}">Home</ion-button>
-      <ion-button [hidden]="!showHeader && artist" [routerLink]="['/playlists']" [queryParams]="{'username': username, 'password': password}">Playlists</ion-button>
-      <ion-button [hidden]="!showHeader && artist" [routerLink]="['/login']" [queryParams]="{'username': username, 'password': password}">Login</ion-button>
+      <ion-button [hidden]="!showHeader || artist" [routerLink]="['/home']" [queryParams]="{'username': username, 'password': password}">Home</ion-button>
+      <ion-button [hidden]="!showHeader || artist" [routerLink]="['/playlists']" [queryParams]="{'username': username, 'password': password}">Playlists</ion-button>
+      <ion-button [hidden]="!showHeader || artist" [routerLink]="['/login']" [queryParams]="{'username': username, 'password': password}">Login</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

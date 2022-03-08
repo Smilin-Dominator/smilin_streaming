@@ -2,9 +2,10 @@
   <ion-toolbar>
     <ion-buttons>
       <ion-title>Artist</ion-title>
-      <ion-button [routerLink]="['/home']" [queryParams]="{'username': username, 'password': password}">Home</ion-button>
-      <ion-button [routerLink]="['/playlists']" [queryParams]="{'username': username, 'password': password}">Playlists</ion-button>
-      <ion-button [routerLink]="['/login']" [queryParams]="{'username': username, 'password': password}">Login</ion-button>
+      <ion-button [hidden]="isArtist" [routerLink]="['/home']" [queryParams]="{'username': username, 'password': password}">Home</ion-button>
+      <ion-button [hidden]="isArtist" [routerLink]="['/playlists']" [queryParams]="{'username': username, 'password': password}">Playlists</ion-button>
+      <ion-button [hidden]="isArtist" [routerLink]="['/login']" [queryParams]="{'username': username, 'password': password}">Login</ion-button>
+      <ion-button [hidden]="!isArtist" [routerLink]="['/login']" [queryParams]="{'username': username, 'password': password, 'artist': true}">Login</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -73,19 +74,19 @@
           <ion-label>Upload</ion-label>
           <ion-list>
             <ion-item>
-              <ion-label>File</ion-label>
+              <ion-label position="fixed">File</ion-label>
               <input type="file" (change)="loadFile($event)">
             </ion-item>
             <ion-item>
-              <ion-label>Song Name</ion-label>
+              <ion-label position="fixed">Song Name</ion-label>
               <ion-input type="text" [(ngModel)]="uploadSongname"></ion-input>
             </ion-item>
             <ion-item>
-              <ion-label>Album</ion-label>
+              <ion-label position="fixed">Album</ion-label>
               <ion-input type="text" [(ngModel)]="uploadAlbum"></ion-input>
             </ion-item>
             <ion-item>
-              <ion-label>Genre</ion-label>
+              <ion-label position="fixed">Genre</ion-label>
               <ion-input type="text" [(ngModel)]="uploadGenre"></ion-input>
             </ion-item>
             <ion-item>

@@ -164,12 +164,12 @@ async def register(username: str, password: str):
             CREATE TABLE {username}.playlists (
                 name VARCHAR(250) PRIMARY KEY,
                 table_name VARCHAR(256)
-            )
+            );
             
             CREATE TABLE {username}.following (
                 artist_id INT PRIMARY KEY,
                 FOREIGN KEY (artist_id) REFERENCES songs.artists(id)
-            )
+            );
                         
         """)
         return "Success!"

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, NavigationStart, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 
 type DescriptionForUser = [
@@ -82,7 +82,6 @@ export class ArtistPage implements OnInit {
         }
       }).forEach(e => {
         this.description = e! as DescriptionForArtist
-        console.log(this.description)
       }).then()
     } else {
       this.http.get("/api/artists/get/user", {
@@ -93,7 +92,6 @@ export class ArtistPage implements OnInit {
         }
       }).forEach(e => {
         this.description = e! as DescriptionForUser
-        console.log(this.description)
       }).then()
     }
   }
@@ -124,16 +122,17 @@ export class ArtistPage implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.password = params['password'];
-      this.username = params['username'];
-      this.isArtist = params['artist'];
+    this.router.events.subscribe((e: NavigationStart) => {
+      const navigation = this.router.getCurrentNavigation();
       this.artist = this.route.snapshot.paramMap.get("artist")
+      this.username = navigation.extras.state ? navigation.extras.state['username'] : undefined;
+      this.password = navigation.extras.state ? navigation.extras.state['password'] : undefined;
+      this.isArtist = navigation.extras.state ? navigation.extras.state['artist'] : undefined;
       if (this.username == undefined || this.password == undefined || this.artist == undefined) {
         this.router.navigate(['/login']).then();
       }
       this.describeArtist()
-    })
+    });
   }
 
 }

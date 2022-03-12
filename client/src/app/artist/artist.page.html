@@ -2,10 +2,10 @@
   <ion-toolbar>
     <ion-buttons>
       <ion-title>Artist</ion-title>
-      <ion-button [hidden]="isArtist" [routerLink]="['/home']" [queryParams]="{'username': username, 'password': password}">Home</ion-button>
-      <ion-button [hidden]="isArtist" [routerLink]="['/playlists']" [queryParams]="{'username': username, 'password': password}">Playlists</ion-button>
-      <ion-button [hidden]="isArtist" [routerLink]="['/login']" [queryParams]="{'username': username, 'password': password}">Login</ion-button>
-      <ion-button [hidden]="!isArtist" [routerLink]="['/login']" [queryParams]="{'username': username, 'password': password, 'artist': true}">Login</ion-button>
+      <ion-button [hidden]="isArtist" [routerLink]="['/home']" [state]="{'username': username, 'password': password}">Home</ion-button>
+      <ion-button [hidden]="isArtist" [routerLink]="['/playlists']" [state]="{'username': username, 'password': password}">Playlists</ion-button>
+      <ion-button [hidden]="isArtist" [routerLink]="['/login']" [state]="{'username': username, 'password': password}">Login</ion-button>
+      <ion-button [hidden]="!isArtist" [routerLink]="['/login']" [state]="{'username': username, 'password': password, 'artist': true}">Login</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

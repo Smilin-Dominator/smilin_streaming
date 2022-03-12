@@ -2,9 +2,9 @@
   <ion-toolbar>
     <ion-buttons>
       <ion-title>Home</ion-title>
-      <ion-button [routerLink]="['/home']" [queryParams]="{'username': username, 'password': password}">Home</ion-button>
-      <ion-button [routerLink]="['/playlists']" [queryParams]="{'username': username, 'password': password}">Playlists</ion-button>
-      <ion-button [routerLink]="['/login']" [queryParams]="{'username': username, 'password': password}">Login</ion-button>
+      <ion-button [routerLink]="['/home']" [state]="{username: username, password: password}">Home</ion-button>
+      <ion-button [routerLink]="['/playlists']" [state]="{username: username, password: password}">Playlists</ion-button>
+      <ion-button [routerLink]="['/login']" [state]="{username: username, password: password}">Login</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -21,7 +21,7 @@
           <ion-label>Songs</ion-label>
           <ion-list>
             <ion-item *ngFor="let song of autocomplete[0]">
-              <ion-button [routerLink]="['/song', song.song]" [queryParams]="{'username': username, 'password': password}">{{song.song}}</ion-button>
+              <ion-button [routerLink]="['/song', song.song]" [state]="{username: username, password: password}">{{song.song}}</ion-button>
             </ion-item>
           </ion-list>
         </ion-item>
@@ -29,7 +29,7 @@
           <ion-label>Artists</ion-label>
           <ion-list>
             <ion-button *ngFor="let song of autocomplete[1]">
-              <ion-label [routerLink]="['/artist', song.artist]" [queryParams]="{'username': username, 'password': password}">{{song.artist}}</ion-label>
+              <ion-label [routerLink]="['/artist', song.artist]" [state]="{username: username, password: password}">{{song.artist}}</ion-label>
             </ion-button>
           </ion-list>
         </ion-item>
@@ -37,7 +37,7 @@
           <ion-label>Albums</ion-label>
           <ion-list>
             <ion-button *ngFor="let song of autocomplete[2]">
-              <ion-label [routerLink]="['/album', song.album]" [queryParams]="{'username': username, 'password': password}">{{song.album}}</ion-label>
+              <ion-label [routerLink]="['/album', song.album]" [state]="{username: username, password: password}">{{song.album}}</ion-label>
             </ion-button>
           </ion-list>
         </ion-item>
@@ -51,7 +51,7 @@
       <ion-list>
         <ion-item *ngFor="let playlist of playlists">
           <ion-label>{{ playlist.name }}</ion-label>
-          <ion-button [routerLink]="['/playlists', playlist.name]" [queryParams]="{'username': username, 'password': password}">Visit</ion-button>
+          <ion-button [routerLink]="['/playlists', playlist.name]" [queryParams]="{username: username, password: password}">Visit</ion-button>
         </ion-item>
       </ion-list>
     </ion-card-content>

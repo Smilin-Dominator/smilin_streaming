@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, NavigationStart, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 
 type Playlists = {
@@ -49,14 +49,15 @@ export class PlaylistsPage implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.password = params['password'];
-      this.username = params['username'];
+    this.router.events.subscribe((e: NavigationStart) => {
+      const navigation = this.router.getCurrentNavigation();
+      this.username = navigation.extras.state ? navigation.extras.state['username'] : undefined
+      this.password = navigation.extras.state ? navigation.extras.state['password'] : undefined
       if (this.username == undefined || this.password == undefined) {
         this.router.navigate(['/login']).then();
       }
       this.getPlaylists();
-    })
+    });
   }
 
 }

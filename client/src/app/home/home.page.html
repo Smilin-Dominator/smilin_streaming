@@ -51,7 +51,7 @@
       <ion-list>
         <ion-item *ngFor="let playlist of playlists">
           <ion-label>{{ playlist.name }}</ion-label>
-          <ion-button [routerLink]="['/playlists', playlist.name]" [queryParams]="{username: username, password: password}">Visit</ion-button>
+          <ion-button [routerLink]="['/playlists', playlist.name]" [state]="{username: username, password: password}">Visit</ion-button>
         </ion-item>
       </ion-list>
     </ion-card-content>

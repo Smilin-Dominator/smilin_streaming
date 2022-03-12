@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, NavigationStart, Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -29,7 +29,7 @@ export class LoginPage implements OnInit {
       }).forEach(e => {
         if (e != false) {
           this.router.navigate(['/home'], {
-            queryParams: {
+            state: {
               "username": this.username,
               "password": this.password
             }
@@ -49,7 +49,7 @@ export class LoginPage implements OnInit {
       }).forEach(e => {
         if (e != false) {
           this.router.navigate(['/artist', this.artist_name], {
-            queryParams: {
+            state: {
               "username": this.username,
               "password": this.password,
               "artist": true
@@ -71,7 +71,7 @@ export class LoginPage implements OnInit {
       }).forEach(e => {
         if (e != false) {
           this.router.navigate(['/artist', this.artist_name], {
-            queryParams: {
+            state: {
               "username": this.username,
               "password": this.password,
               "artist": true
@@ -92,7 +92,7 @@ export class LoginPage implements OnInit {
       }).forEach(e => {
         if (e != false) {
           this.router.navigate(['/home'], {
-            queryParams: {
+            state: {
               "username": this.username,
               "password": this.password,
               "artist": true
@@ -104,12 +104,15 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.username = params['username'];
-      this.password = params['password'];
-      this.artist = params['artist'] as boolean;
-      if (this.username != undefined || this.password != undefined) {
-        this.showHeader = true;
+    this.router.events.subscribe((e: NavigationStart) => {
+      const navigation = this.router.getCurrentNavigation();
+      if (navigation !== null) {
+        this.username = navigation.extras.state ? navigation.extras.state['username'] : undefined;
+        this.password = navigation.extras.state ? navigation.extras.state['password'] : undefined;
+        this.artist = navigation.extras.state ? navigation.extras.state['artist'] as boolean : undefined;
+        if (this.username != undefined || this.password != undefined) {
+          this.showHeader = true;
+        }
       }
     })
   }

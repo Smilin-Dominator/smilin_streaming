@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, NavigationStart, Router} from "@angular/router";
 import { Howl } from "howler";
 import {IonRange} from '@ionic/angular';
 
@@ -153,15 +153,16 @@ export class PlaylistPage implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.password = params['password'];
-      this.username = params['username'];
-      this.playlist_name = this.route.snapshot.paramMap.get("playlist")
-      if (this.username == undefined || this.password == undefined) {
+    this.router.events.subscribe((e: NavigationStart) => {
+      const navigation = this.router.getCurrentNavigation();
+      this.playlist_name = this.route.snapshot.paramMap.get("playlist");
+      this.username = navigation.extras.state ? navigation.extras.state['username'] : undefined
+      this.password = navigation.extras.state ? navigation.extras.state['password'] : undefined
+      if (this.username == undefined || this.password == undefined || this.playlist_name == undefined) {
         this.router.navigate(['/login']).then();
       }
       this.describePlaylist();
-    })
+    });
   }
 
 }

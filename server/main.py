@@ -11,7 +11,7 @@ from datetime import datetime
 from shutil import copyfileobj
 
 app = FastAPI()
-DATABASE_URL = "mysql+pymysql://root:override@localhost/app"
+DATABASE_URL = "mysql+pymysql://doadmin:g13sWuHvpAPu876F@private-sm-mysql-do-user-10992425-0.b.db.ondigitalocean.com/app"
 database = Db(DATABASE_URL)
 engine = create_engine(DATABASE_URL)
 songs = Path("songs")

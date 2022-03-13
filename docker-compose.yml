@@ -1,14 +1,14 @@
 version: '3.9'
 services:
-  mariadb:
-    container_name: "MariaDB"
-    image: mariadb:latest
+  mysql:
+    container_name: "MySQL"
+    image: mysql:latest
     environment:
-      MARIADB_ROOT_PASSWORD: override
-      MARIADB_ROOT_HOST: '%'
-      MARIADB_DATABASE: app
-      MARIADB_USER: server
-      MARIADB_PASSWORD: test
+      MYSQL_ROOT_PASSWORD: override
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: app
+      MYSQL_USER: server
+      MYSQL_PASSWORD: test
     ports:
       - "3306:3306"
     volumes:

@@ -1,4 +1,4 @@
-# Run The MariaDB Server
+# Run The MySQL Server
 `docker-compose up -d`
 
 # Run The API
